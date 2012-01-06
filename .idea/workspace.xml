@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b602acb2-bbcf-496a-ad77-f8c754647aec" name="Default" comment="">
+    <list default="true" id="b602acb2-bbcf-496a-ad77-f8c754647aec" name="Default" comment="Minimized Javascript">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cell-counter/manifest.appcache" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/css/style.css" afterPath="$PROJECT_DIR$/cell-counter/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index.html" afterPath="$PROJECT_DIR$/cell-counter/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/libs/jquery.tools.min.js" afterPath="$PROJECT_DIR$/cell-counter/libs/jquery.tools.min.js" />
     </list>
     <ignored path="shybyte-github.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -29,10 +26,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="44" selection-start="186" selection-end="186" vertical-scroll-proportion="0.19765739">
+            <state line="9" column="44" selection-start="186" selection-end="186" vertical-scroll-proportion="-5.625">
               <folding />
             </state>
           </provider>
@@ -41,10 +38,17 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cell-counter/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="26" selection-start="56" selection-end="56" vertical-scroll-proportion="-1.875">
-              <folding>
-                <marker date="1325862935000" expanded="true" signature="80:106" placeholder="{...}" />
-              </folding>
+            <state line="2" column="24" selection-start="47" selection-end="47" vertical-scroll-proportion="-1.25">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="manifest.appcache" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cell-counter/manifest.appcache">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="3" column="13" selection-start="51" selection-end="51" vertical-scroll-proportion="0.06364922">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -66,6 +70,7 @@
       <list>
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/cell-counter/index.html" />
+        <option value="$PROJECT_DIR$/cell-counter/manifest.appcache" />
       </list>
     </option>
   </component>
@@ -125,6 +130,60 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="cell-counter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shybyte-github" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shybyte-github" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cell-counter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shybyte-github" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shybyte-github" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cell-counter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="images" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shybyte-github" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="shybyte-github" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cell-counter" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -211,7 +270,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added CellCounter" />
+    <option name="LAST_COMMIT_MESSAGE" value="Minimized Javascript" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -225,23 +284,29 @@
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
     <MESSAGE value="Added CellCounter" />
+    <MESSAGE value="Minimized Javascript" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cell-counter/index.html">
+    <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="26" selection-start="56" selection-end="56" vertical-scroll-proportion="-1.875">
-          <folding>
-            <marker date="1325862935000" expanded="true" signature="80:106" placeholder="{...}" />
-          </folding>
+        <state line="9" column="44" selection-start="186" selection-end="186" vertical-scroll-proportion="-5.625">
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/cell-counter/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="44" selection-start="186" selection-end="186" vertical-scroll-proportion="0.19765739">
+        <state line="2" column="24" selection-start="47" selection-end="47" vertical-scroll-proportion="-1.25">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cell-counter/manifest.appcache">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="13" selection-start="51" selection-end="51" vertical-scroll-proportion="0.06364922">
           <folding />
         </state>
       </provider>
