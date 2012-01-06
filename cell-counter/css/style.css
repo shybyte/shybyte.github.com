@@ -76,10 +76,12 @@ canvas.ondragover {
 
 .marking {
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
+    margin-top: -5px;
+    margin-left: -5px;
     background: red;
-    border-radius: 5px;
+    border-radius: 10px;
     /*cursor: move;*/
 }
 

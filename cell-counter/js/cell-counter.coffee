@@ -1,4 +1,3 @@
-markingsSize = 10
 markingsIdCounter = 0
 draggedMarking = null
 
@@ -21,17 +20,18 @@ class Marking
 
   move:(pos) ->
     @pos = pos
-    screenPos = {left:pos.x - markingsSize / 2, top:pos.y - markingsSize / 2}
+    screenPos = {left:pos.x, top:pos.y}
     @el.css(screenPos)
 
 
 initCellCounter = () ->
   $threshold = jq('#threshold')
   $fadeThresholdImage = jq('#fadeThresholdImage')
+  $markingsSize = jq('#markingsSize')
   currentImg = null
-  canvas = $('mainCanvas')
-  $canvas = jq(canvas)
-  filteredCanvas = $('filteredCanvas')
+  $canvas = jq('#mainCanvas')
+  canvas = $canvas.get(0)
+  filteredCanvas = jq('#filteredCanvas').get(0)
   ctx = canvas.getContext('2d')
   ctxFiltered = filteredCanvas.getContext('2d')
   markings = []
@@ -40,11 +40,8 @@ initCellCounter = () ->
   init = ->
     initDragAndDrop()
     initManualCounter()
+    initSliders()
     loadImage('images/nora1.jpg')
-    $threshold.rangeinput().change(filterImage)
-    $threshold = jq('#threshold').hide()
-    $fadeThresholdImage.rangeinput().change(changeFading)
-    $fadeThresholdImage = jq('#fadeThresholdImage').hide()
     jq('#removeAllMarkings').click(removeAllMarkings)
     jq('#filterButton').click(filterImage2)
 
@@ -68,6 +65,24 @@ initCellCounter = () ->
       #draggedMarking.el.css('opacity', '1.0')
       #draggedMarking = null
     )
+
+  initSliders = ->
+    bindSliderChange = ($slider, onChange)->
+      $slider.hide().rangeinput().change(onChange)
+    bindSliderChangeAndSlide = ($slider, onChange)->
+      bindSliderChange($slider, onChange).bind('onSlide', onChange)
+    $markingsSize = bindSliderChangeAndSlide($markingsSize, onChangeMarkingsSize)
+    $threshold = bindSliderChange($threshold, filterImage)
+    $fadeThresholdImage = bindSliderChangeAndSlide($fadeThresholdImage, changeFading)
+
+
+  onChangeMarkingsSize = ->
+    cssRule = getCSSRule('.marking')
+    newMarkingsSize = $markingsSize.val()
+    cssRule.style.width = newMarkingsSize + 'px'
+    cssRule.style.height = newMarkingsSize + 'px'
+    cssRule.style.marginLeft = -newMarkingsSize / 2 + 'px'
+    cssRule.style.marginTop = -newMarkingsSize / 2 + 'px'
 
   eventPosInCanvas = (e)->
     canvasOffset = $canvas.offset()

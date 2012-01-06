@@ -1,6 +1,5 @@
 (function() {
-  var Marking, checkAPIsAvailable, draggedMarking, initCellCounter, markingsIdCounter, markingsSize;
-  markingsSize = 10;
+  var Marking, checkAPIsAvailable, draggedMarking, initCellCounter, markingsIdCounter;
   markingsIdCounter = 0;
   draggedMarking = null;
   Marking = (function() {
@@ -26,21 +25,22 @@
       var screenPos;
       this.pos = pos;
       screenPos = {
-        left: pos.x - markingsSize / 2,
-        top: pos.y - markingsSize / 2
+        left: pos.x,
+        top: pos.y
       };
       return this.el.css(screenPos);
     };
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $threshold, addMarking, canvas, changeFading, ctx, ctxFiltered, currentImg, eventPosInCanvas, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, loadImage, loadLocalImage, markings, removeAllMarkings, removeMarking, showCellCount;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, canvas, changeFading, ctx, ctxFiltered, currentImg, eventPosInCanvas, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initSliders, loadImage, loadLocalImage, markings, onChangeMarkingsSize, removeAllMarkings, removeMarking, showCellCount;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
+    $markingsSize = jq('#markingsSize');
     currentImg = null;
-    canvas = $('mainCanvas');
-    $canvas = jq(canvas);
-    filteredCanvas = $('filteredCanvas');
+    $canvas = jq('#mainCanvas');
+    canvas = $canvas.get(0);
+    filteredCanvas = jq('#filteredCanvas').get(0);
     ctx = canvas.getContext('2d');
     ctxFiltered = filteredCanvas.getContext('2d');
     markings = [];
@@ -48,11 +48,8 @@
     init = function() {
       initDragAndDrop();
       initManualCounter();
+      initSliders();
       loadImage('images/nora1.jpg');
-      $threshold.rangeinput().change(filterImage);
-      $threshold = jq('#threshold').hide();
-      $fadeThresholdImage.rangeinput().change(changeFading);
-      $fadeThresholdImage = jq('#fadeThresholdImage').hide();
       jq('#removeAllMarkings').click(removeAllMarkings);
       return jq('#filterButton').click(filterImage2);
     };
@@ -71,6 +68,27 @@
           return log("nada");
         }
       });
+    };
+    initSliders = function() {
+      var bindSliderChange, bindSliderChangeAndSlide;
+      bindSliderChange = function($slider, onChange) {
+        return $slider.hide().rangeinput().change(onChange);
+      };
+      bindSliderChangeAndSlide = function($slider, onChange) {
+        return bindSliderChange($slider, onChange).bind('onSlide', onChange);
+      };
+      $markingsSize = bindSliderChangeAndSlide($markingsSize, onChangeMarkingsSize);
+      $threshold = bindSliderChange($threshold, filterImage);
+      return $fadeThresholdImage = bindSliderChangeAndSlide($fadeThresholdImage, changeFading);
+    };
+    onChangeMarkingsSize = function() {
+      var cssRule, newMarkingsSize;
+      cssRule = getCSSRule('.marking');
+      newMarkingsSize = $markingsSize.val();
+      cssRule.style.width = newMarkingsSize + 'px';
+      cssRule.style.height = newMarkingsSize + 'px';
+      cssRule.style.marginLeft = -newMarkingsSize / 2 + 'px';
+      return cssRule.style.marginTop = -newMarkingsSize / 2 + 'px';
     };
     eventPosInCanvas = function(e) {
       var canvasOffset;

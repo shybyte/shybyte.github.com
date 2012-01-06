@@ -2,24 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Canvas</title>
-    <script type="text/javascript" src="libs/prototype.js"></script>
-    <script type="text/javascript" src="libs/jquery.js"></script>
-    <script type="text/javascript" src="libs/jquery.tools.min.js"></script>
-    <script type="text/javascript" src="libs/underscore.js"></script>
-    <script type="text/javascript" src="libs/common.js"></script>
-    <script type="text/javascript" src="js/filters.js"></script>
-    <script type="text/javascript" src="js/filters-fast.js"></script>
-    <script type="text/javascript" src="js/cell-counter.js"></script>
+    <title>Marco's Cell Counter</title>
+    <script type="text/javascript" src="js/cell-counter-with-libs.min.js"></script>
     <link type="text/css" rel="stylesheet" href="css/style.css">
-    <style type="text/css"></style>
-    <script type="text/javascript">
-        jq(function () {
-        });
-    </script>
 </head>
 <body>
-<h1>Cell Counter</h1>
+<h1>Marco's Cell Counter</h1>
 
 <div id="tools">
 
@@ -36,6 +24,8 @@
 
     <div class="toolsSection">
         <button id="removeAllMarkings">Remove All Markings</button>
+        <label for="markingsSize" class="rangeLabel">Markings Size:</label>
+        <input id="markingsSize" type="range" min="0" max="20" value="9">
     </div>
 
     <div class="toolsSection">
