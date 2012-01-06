@@ -1,5 +1,7 @@
 CACHE MANIFEST
 # version 1
+
+CACHE:
 index.html
 css/style.css
 js/cell-counter-with-libs.min.js
