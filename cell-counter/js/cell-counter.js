@@ -33,7 +33,7 @@
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, canvas, changeFading, ctx, ctxFiltered, currentImg, eventPosInCanvas, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initSliders, loadImage, loadLocalImage, markings, onChangeMarkingsSize, removeAllMarkings, removeMarking, showCellCount;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, canvas, changeFading, ctx, ctxFiltered, currentImg, eventPosInCanvas, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initReadFile, initSliders, loadImage, loadLocalImage, markings, onChangeMarkingsSize, removeAllMarkings, removeMarking, showCellCount;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
     $markingsSize = jq('#markingsSize');
@@ -46,12 +46,22 @@
     markings = [];
     $markings = jq('#markings');
     init = function() {
+      initReadFile();
       initDragAndDrop();
       initManualCounter();
       initSliders();
       loadImage('images/nora1.jpg');
       jq('#removeAllMarkings').click(removeAllMarkings);
       return jq('#filterButton').click(filterImage2);
+    };
+    initReadFile = function() {
+      var $openFile;
+      $openFile = jq('#openFile');
+      return $openFile.change(function() {
+        var files;
+        files = $openFile.get(0).files;
+        return loadLocalImage(files[0]);
+      });
     };
     initDragAndDrop = function() {
       return $markings.bind('dragover', function() {
@@ -173,6 +183,7 @@
     };
     loadImage = function(src) {
       var img;
+      removeAllMarkings();
       img = new Image();
       img.onload = function() {
         currentImg = img;

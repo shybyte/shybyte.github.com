@@ -40,14 +40,15 @@ input[type="range"] {
 }
 
 #mainCanvasContainer {
-    padding: 10px;
-    border-radius: 5px;
+    padding: 5px;
+    border-radius: 4px;
     background: #444;
     margin-left: 230px;
     position: relative;
 }
 
 #mainCanvasContainer2 {
+    margin-top: 5px;
     position: relative;
 }
 

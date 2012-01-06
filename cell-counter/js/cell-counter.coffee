@@ -38,12 +38,21 @@ initCellCounter = () ->
   $markings = jq('#markings')
 
   init = ->
+    initReadFile()
     initDragAndDrop()
     initManualCounter()
     initSliders()
     loadImage('images/nora1.jpg')
     jq('#removeAllMarkings').click(removeAllMarkings)
     jq('#filterButton').click(filterImage2)
+
+  initReadFile = ->
+    $openFile = jq('#openFile')
+    $openFile.change( ->
+      files = $openFile.get(0).files
+      loadLocalImage(files[0])
+    )
+
 
   initDragAndDrop = ->
     $markings.bind('dragover',
@@ -148,6 +157,7 @@ initCellCounter = () ->
     )
 
   loadImage = (src) ->
+    removeAllMarkings()
     img = new Image()
 
     img.onload = ->
