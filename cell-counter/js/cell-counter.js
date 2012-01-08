@@ -22,18 +22,20 @@
       this.move(pos);
     }
     Marking.prototype.move = function(pos) {
+      return this.pos = pos;
+    };
+    Marking.prototype.updateScreenPos = function(canvas, $canvas) {
       var screenPos;
-      this.pos = pos;
       screenPos = {
-        left: pos.x,
-        top: pos.y
+        left: this.pos.x / canvas.width * $canvas.width(),
+        top: this.pos.y / canvas.height * $canvas.height()
       };
       return this.el.css(screenPos);
     };
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, canvas, changeFading, ctx, ctxFiltered, currentImg, eventPosInCanvas, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initReadFile, initSliders, loadImage, loadLocalImage, markings, onChangeMarkingsSize, removeAllMarkings, removeMarking, showCellCount;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, ctx, ctxFiltered, currentFilename, currentImg, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, showCellCount;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
     $markingsSize = jq('#markingsSize');
@@ -45,14 +47,55 @@
     ctxFiltered = filteredCanvas.getContext('2d');
     markings = [];
     $markings = jq('#markings');
+    currentFilename = "";
     init = function() {
       initReadFile();
       initDragAndDrop();
       initManualCounter();
       initSliders();
       loadImage('images/nora1.jpg');
+      initOnResize();
       jq('#removeAllMarkings').click(removeAllMarkings);
       return jq('#filterButton').click(filterImage2);
+    };
+    initOnResize = function() {
+      return jq(window).resize(function(e) {
+        var marking, _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = markings.length; _i < _len; _i++) {
+          marking = markings[_i];
+          _results.push(marking.updateScreenPos(canvas, $canvas));
+        }
+        return _results;
+      });
+    };
+    loadMarkings = function() {
+      var markingData, markingsData, markingsDataString, _i, _len, _results;
+      removeAllMarkings();
+      markingsDataString = localStorage['markings_data_' + currentFilename] || "[]";
+      markingsData = JSON.parse(markingsDataString);
+      _results = [];
+      for (_i = 0, _len = markingsData.length; _i < _len; _i++) {
+        markingData = markingsData[_i];
+        _results.push(addMarking(markingData.pos, markingData.type));
+      }
+      return _results;
+    };
+    saveMarkings = function() {
+      var marking, markingsData;
+      markingsData = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = markings.length; _i < _len; _i++) {
+          marking = markings[_i];
+          _results.push({
+            pos: marking.pos,
+            type: marking.type
+          });
+        }
+        return _results;
+      })();
+      return localStorage['markings_data_' + currentFilename] = JSON.stringify(markingsData);
     };
     initReadFile = function() {
       var $openFile;
@@ -100,28 +143,37 @@
       cssRule.style.marginLeft = -newMarkingsSize / 2 + 'px';
       return cssRule.style.marginTop = -newMarkingsSize / 2 + 'px';
     };
-    eventPosInCanvas = function(e) {
-      var canvasOffset;
-      canvasOffset = $canvas.offset();
-      return {
-        x: e.pageX - canvasOffset.left,
-        y: e.pageY - canvasOffset.top
-      };
-    };
     initManualCounter = function() {
       $markings.click(function(e) {
         var pos;
-        pos = eventPosInCanvas(e);
+        pos = eventPosInImage(e);
+        log(pos);
         if (e.ctrlKey && markings.length > 0) {
           return removeMarking(pos);
         } else {
-          return addMarking(pos);
+          return addMarkingWithSelectedType(pos);
         }
       });
       return $markings.bind('contextmenu', function(e) {
         e.preventDefault();
-        return removeMarking(eventPosInCanvas(e));
+        return removeMarking(eventPosInImage(e));
       });
+    };
+    eventPosInImage = function(e) {
+      var eventPosInCanvas, p;
+      eventPosInCanvas = function(e) {
+        var canvasOffset;
+        canvasOffset = $canvas.offset();
+        return {
+          x: e.pageX - canvasOffset.left,
+          y: e.pageY - canvasOffset.top
+        };
+      };
+      p = eventPosInCanvas(e);
+      return {
+        x: Math.round(p.x / $canvas.width() * canvas.width),
+        y: Math.round(p.y / $canvas.height() * canvas.height)
+      };
     };
     changeFading = function() {
       var v, v1, v2;
@@ -137,12 +189,16 @@
       jq('#mainCanvas').css('opacity', v1);
       return jq('#filteredCanvas').css('opacity', v2);
     };
-    addMarking = function(pos) {
-      var marking, markingType;
-      markingType = jq('input:radio[name=markingColor]:checked').val();
-      marking = new Marking(pos, markingType);
+    addMarkingWithSelectedType = function(pos) {
+      addMarking(pos, jq('input:radio[name=markingColor]:checked').val());
+      return saveMarkings();
+    };
+    addMarking = function(pos, type) {
+      var marking;
+      marking = new Marking(pos, type);
       markings.push(marking);
       $markings.append(marking.el);
+      marking.updateScreenPos(canvas, $canvas);
       return showCellCount();
     };
     removeMarking = function(pos) {
@@ -151,8 +207,13 @@
       if (marking) {
         markings = _.without(markings, marking);
         marking.el.remove();
-        return showCellCount();
+        showCellCount();
+        return saveMarkings();
       }
+    };
+    onRemoveAllMarkings = function() {
+      removeAllMarkings();
+      return saveMarkings();
     };
     removeAllMarkings = function() {
       var marking, _i, _len;
@@ -181,26 +242,27 @@
         return dx * dx + dy * dy;
       });
     };
+    loadLocalImage = function(file) {
+      var reader;
+      reader = new FileReader();
+      reader.onload = function(event) {
+        loadImage(event.target.result);
+        return currentFilename = file.name;
+      };
+      return reader.readAsDataURL(file);
+    };
     loadImage = function(src) {
       var img;
-      removeAllMarkings();
       img = new Image();
       img.onload = function() {
         currentImg = img;
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
+        loadMarkings();
         return filterImage();
       };
       return img.src = src;
-    };
-    loadLocalImage = function(file) {
-      var reader;
-      reader = new FileReader();
-      reader.onload = function(event) {
-        return loadImage(event.target.result);
-      };
-      return reader.readAsDataURL(file);
     };
     filterImage = function() {
       var filteredImage;

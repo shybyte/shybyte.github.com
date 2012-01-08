@@ -20,8 +20,11 @@ class Marking
 
   move:(pos) ->
     @pos = pos
-    screenPos = {left:pos.x, top:pos.y}
+
+  updateScreenPos: (canvas,$canvas) ->
+    screenPos = {left:@pos.x/canvas.width*$canvas.width(), top:@pos.y/canvas.height*$canvas.height()}
     @el.css(screenPos)
+
 
 
 initCellCounter = () ->
@@ -36,6 +39,7 @@ initCellCounter = () ->
   ctxFiltered = filteredCanvas.getContext('2d')
   markings = []
   $markings = jq('#markings')
+  currentFilename = ""
 
   init = ->
     initReadFile()
@@ -43,14 +47,34 @@ initCellCounter = () ->
     initManualCounter()
     initSliders()
     loadImage('images/nora1.jpg')
+    initOnResize()
     jq('#removeAllMarkings').click(removeAllMarkings)
     jq('#filterButton').click(filterImage2)
 
+  initOnResize = ->
+    jq(window).resize( (e)->
+      #updateMarkingsScreenPos
+      for marking in markings
+        marking.updateScreenPos(canvas,$canvas)
+    )
+
+  loadMarkings = ()->
+    removeAllMarkings()
+    markingsDataString = (localStorage['markings_data_'+currentFilename]) || "[]"
+    markingsData = JSON.parse(markingsDataString)
+    for markingData in markingsData
+      addMarking(markingData.pos, markingData.type)
+
+  saveMarkings = () ->
+    markingsData = ({pos:marking.pos,type:marking.type} for marking in markings)
+    localStorage['markings_data_'+currentFilename] = JSON.stringify(markingsData)
+
+
   initReadFile = ->
     $openFile = jq('#openFile')
-    $openFile.change( ->
-      files = $openFile.get(0).files
-      loadLocalImage(files[0])
+    $openFile.change(->
+        files = $openFile.get(0).files
+        loadLocalImage(files[0])
     )
 
 
@@ -93,22 +117,31 @@ initCellCounter = () ->
     cssRule.style.marginLeft = -newMarkingsSize / 2 + 'px'
     cssRule.style.marginTop = -newMarkingsSize / 2 + 'px'
 
-  eventPosInCanvas = (e)->
-    canvasOffset = $canvas.offset()
-    return {x:e.pageX - canvasOffset.left, y:e.pageY - canvasOffset.top}
-
   initManualCounter = ->
     $markings.click((e) ->
-        pos = eventPosInCanvas(e)
+        pos = eventPosInImage(e)
+        log(pos)
         if e.ctrlKey and markings.length > 0
           removeMarking(pos)
         else
-          addMarking(pos)
+          addMarkingWithSelectedType(pos)
     )
     $markings.bind('contextmenu', (e)->
         e.preventDefault()
-        removeMarking(eventPosInCanvas(e))
+        removeMarking(eventPosInImage(e))
     )
+
+  eventPosInImage = (e)->
+    eventPosInCanvas = (e)->
+      canvasOffset = $canvas.offset()
+      return {x:e.pageX - canvasOffset.left, y:e.pageY - canvasOffset.top}
+    p = eventPosInCanvas(e)
+    return {
+      x:Math.round(p.x/$canvas.width()*canvas.width)
+      y:Math.round(p.y/$canvas.height()*canvas.height)
+    }
+
+
 
   changeFading = ->
     v = $fadeThresholdImage.val()
@@ -122,11 +155,15 @@ initCellCounter = () ->
     jq('#mainCanvas').css('opacity', v1)
     jq('#filteredCanvas').css('opacity', v2)
 
-  addMarking = (pos) ->
-    markingType = jq('input:radio[name=markingColor]:checked').val()
-    marking = new Marking(pos, markingType)
+  addMarkingWithSelectedType = (pos) ->
+    addMarking(pos, jq('input:radio[name=markingColor]:checked').val())
+    saveMarkings()
+
+  addMarking = (pos, type) ->
+    marking = new Marking(pos, type)
     markings.push(marking)
     $markings.append(marking.el)
+    marking.updateScreenPos(canvas,$canvas)
     showCellCount()
 
   removeMarking = (pos) ->
@@ -135,12 +172,19 @@ initCellCounter = () ->
       markings = _.without(markings, marking)
       marking.el.remove()
       showCellCount()
+      saveMarkings()
+
+  onRemoveAllMarkings = ->
+    removeAllMarkings()
+    saveMarkings()
 
   removeAllMarkings = ->
     for marking in markings
       marking.el.remove()
     markings = []
     showCellCount()
+
+
 
   showCellCount = ->
     groupedMarkings = _.groupBy(markings, 'type')
@@ -156,24 +200,23 @@ initCellCounter = () ->
         dx * dx + dy * dy
     )
 
-  loadImage = (src) ->
-    removeAllMarkings()
-    img = new Image()
+  loadLocalImage = (file) ->
+    reader = new FileReader()
+    reader.onload = (event) ->
+      loadImage(event.target.result)
+      currentFilename = file.name
+    reader.readAsDataURL(file)
 
+  loadImage = (src) ->
+    img = new Image()
     img.onload = ->
       currentImg = img
       canvas.width = img.width
       canvas.height = img.height
       ctx.drawImage(img, 0, 0)
+      loadMarkings()
       filterImage()
-
     img.src = src
-
-  loadLocalImage = (file) ->
-    reader = new FileReader()
-    reader.onload = (event) ->
-      loadImage(event.target.result)
-    reader.readAsDataURL(file)
 
   filterImage = ->
     filteredCanvas.width = currentImg.width
