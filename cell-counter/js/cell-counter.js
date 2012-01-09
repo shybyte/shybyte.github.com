@@ -72,7 +72,7 @@
     loadMarkings = function() {
       var markingData, markingsData, markingsDataString, _i, _len, _results;
       removeAllMarkings();
-      markingsDataString = localStorage['markings_data_' + currentFilename] || "[]";
+      markingsDataString = localStorage['cell_counter_markings_data_' + currentFilename] || "[]";
       markingsData = JSON.parse(markingsDataString);
       _results = [];
       for (_i = 0, _len = markingsData.length; _i < _len; _i++) {
@@ -95,7 +95,7 @@
         }
         return _results;
       })();
-      return localStorage['markings_data_' + currentFilename] = JSON.stringify(markingsData);
+      return localStorage['cell_counter_markings_data_' + currentFilename] = JSON.stringify(markingsData);
     };
     initReadFile = function() {
       var $openFile;
@@ -113,12 +113,13 @@
         canvas.className = '';
         return false;
       }).bind('drop', function(e) {
+        var nada;
         canvas.className = '';
         e.preventDefault();
         if (e.originalEvent.dataTransfer.files.length > 0) {
           return loadLocalImage(e.originalEvent.dataTransfer.files[0]);
         } else if (draggedMarking) {
-          return log("nada");
+          return nada = 1;
         }
       });
     };
@@ -147,7 +148,6 @@
       $markings.click(function(e) {
         var pos;
         pos = eventPosInImage(e);
-        log(pos);
         if (e.ctrlKey && markings.length > 0) {
           return removeMarking(pos);
         } else {

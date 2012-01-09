@@ -60,14 +60,14 @@ initCellCounter = () ->
 
   loadMarkings = ()->
     removeAllMarkings()
-    markingsDataString = (localStorage['markings_data_'+currentFilename]) || "[]"
+    markingsDataString = (localStorage['cell_counter_markings_data_'+currentFilename]) || "[]"
     markingsData = JSON.parse(markingsDataString)
     for markingData in markingsData
       addMarking(markingData.pos, markingData.type)
 
   saveMarkings = () ->
     markingsData = ({pos:marking.pos,type:marking.type} for marking in markings)
-    localStorage['markings_data_'+currentFilename] = JSON.stringify(markingsData)
+    localStorage['cell_counter_markings_data_'+currentFilename] = JSON.stringify(markingsData)
 
 
   initReadFile = ->
@@ -93,7 +93,7 @@ initCellCounter = () ->
         if e.originalEvent.dataTransfer.files.length > 0
           loadLocalImage(e.originalEvent.dataTransfer.files[0])
         else if draggedMarking
-          log("nada")
+          nada = 1
       #draggedMarking.move(eventPosInCanvas(e.originalEvent))
       #draggedMarking.el.css('opacity', '1.0')
       #draggedMarking = null
@@ -120,7 +120,6 @@ initCellCounter = () ->
   initManualCounter = ->
     $markings.click((e) ->
         pos = eventPosInImage(e)
-        log(pos)
         if e.ctrlKey and markings.length > 0
           removeMarking(pos)
         else
