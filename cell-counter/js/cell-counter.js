@@ -1,5 +1,5 @@
 (function() {
-  var Marking, checkAPIsAvailable, draggedMarking, initCellCounter, markingsIdCounter;
+  var Marking, draggedMarking, initCellCounter, isCanvasSupported, markingsIdCounter, warnIfNoFileReaderAvailable;
   markingsIdCounter = 0;
   draggedMarking = null;
   Marking = (function() {
@@ -35,7 +35,7 @@
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, ctx, ctxFiltered, currentFilename, currentImg, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, showCellCount;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, ctx, ctxFiltered, currentFilename, currentImg, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
     $markingsSize = jq('#markingsSize');
@@ -49,6 +49,7 @@
     $markings = jq('#markings');
     currentFilename = "";
     init = function() {
+      loadSettings();
       initReadFile();
       initDragAndDrop();
       initManualCounter();
@@ -68,6 +69,28 @@
         }
         return _results;
       });
+    };
+    saveSettings = function() {
+      var settings;
+      settings = {
+        markingsSize: $markingsSize.val(),
+        threshold: $threshold.val(),
+        fadeThresholdImage: $fadeThresholdImage.val()
+      };
+      return localStorage['cell_counter_settings'] = JSON.stringify(settings);
+    };
+    loadSettings = function() {
+      var settings, settingsString;
+      settingsString = localStorage['cell_counter_settings'];
+      if (settingsString) {
+        settings = JSON.parse(settingsString);
+        log(settings);
+        $threshold.val(settings.threshold);
+        $markingsSize.val(settings.markingsSize);
+        $fadeThresholdImage.val(settings.fadeThresholdImage);
+        onChangeMarkingsSize();
+        return changeFading();
+      }
     };
     loadMarkings = function() {
       var markingData, markingsData, markingsDataString, _i, _len, _results;
@@ -126,7 +149,10 @@
     initSliders = function() {
       var bindSliderChange, bindSliderChangeAndSlide;
       bindSliderChange = function($slider, onChange) {
-        return $slider.hide().rangeinput().change(onChange);
+        return $slider.hide().rangeinput().change(function() {
+          saveSettings();
+          return onChange();
+        });
       };
       bindSliderChangeAndSlide = function($slider, onChange) {
         return bindSliderChange($slider, onChange).bind('onSlide', onChange);
@@ -281,13 +307,22 @@
     };
     return init();
   };
-  checkAPIsAvailable = function() {
-    if (typeof window.FileReader === 'undefined') {
-      return alert("No local file reading possible. Please use a newer version of firefox or google chrome");
+  isCanvasSupported = function() {
+    var elem;
+    elem = document.createElement('canvas');
+    return !!(elem.getContext && elem.getContext('2d'));
+  };
+  warnIfNoFileReaderAvailable = function() {
+    if (!window.FileReader) {
+      return alert("No local file reading possible. Please use a newer version of firefox,google chrome or safari");
     }
   };
   jq(function() {
-    checkAPIsAvailable();
-    return initCellCounter();
+    if (isCanvasSupported()) {
+      warnIfNoFileReaderAvailable();
+      return initCellCounter();
+    } else {
+      return alert("Please use a newer browser.");
+    }
   });
 }).call(this);
