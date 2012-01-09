@@ -32,9 +32,10 @@ Filters.thresholdRG = function (pixels, args) {
     return pixels;
 }
 
-
-Filters.tmpCanvas = document.createElement('canvas');
-Filters.tmpCtx = Filters.tmpCanvas.getContext('2d');
+if (isCanvasSupported()) {
+    Filters.tmpCanvas = document.createElement('canvas');
+    Filters.tmpCtx = Filters.tmpCanvas.getContext('2d');
+}
 
 Filters.createImageData = function(w,h) {
     return this.tmpCtx.createImageData(w,h);

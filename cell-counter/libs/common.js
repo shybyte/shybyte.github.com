@@ -1,6 +1,8 @@
 jQuery.noConflict();
-jq=jQuery;
+jq = jQuery;
 
-function log(o){
-    console.log(o);
+function log(o) {
+    if (console) {
+        console.log(o);
+    }
 }

@@ -41,6 +41,7 @@ initCellCounter = () ->
   currentFilename = ""
 
   init = ->
+    warnIfNoFileReaderAvailable()
     loadSettings()
     initReadFile()
     initDragAndDrop()
@@ -71,7 +72,6 @@ initCellCounter = () ->
     settingsString = localStorage['cell_counter_settings']
     if settingsString
       settings = JSON.parse(settingsString)
-      log(settings)
       $threshold.val(settings.threshold)
       $markingsSize.val(settings.markingsSize)
       $fadeThresholdImage.val(settings.fadeThresholdImage)
@@ -252,22 +252,18 @@ initCellCounter = () ->
     filteredImage = Filters.filterCanvas(Filters.fastGaussian, canvas, convolutionMatrix)
     ctx.putImageData(filteredImage, 0, 0)
 
+  warnIfNoFileReaderAvailable = ->
+    if(!window.FileReader)
+      alert("No local file reading possible. Please use a newer version of firefox,google chrome or safari")
+      jq('#openFile').replaceWith($canvas.html());
+
   init()
 
 
-isCanvasSupported = ->
-  elem = document.createElement('canvas')
-  !!(elem.getContext && elem.getContext('2d'))
-
-
-warnIfNoFileReaderAvailable = ->
-  if(!window.FileReader)
-    alert("No local file reading possible. Please use a newer version of firefox,google chrome or safari")
-
 jq ->
   if (isCanvasSupported())
-    warnIfNoFileReaderAvailable()
     initCellCounter()
   else
+    jq('#openFile').hide()
     alert("Please use a newer browser.")
 

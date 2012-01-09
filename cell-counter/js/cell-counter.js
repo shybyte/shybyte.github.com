@@ -1,5 +1,5 @@
 (function() {
-  var Marking, draggedMarking, initCellCounter, isCanvasSupported, markingsIdCounter, warnIfNoFileReaderAvailable;
+  var Marking, draggedMarking, initCellCounter, markingsIdCounter;
   markingsIdCounter = 0;
   draggedMarking = null;
   Marking = (function() {
@@ -35,7 +35,7 @@
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, ctx, ctxFiltered, currentFilename, currentImg, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, ctx, ctxFiltered, currentFilename, currentImg, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, init, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount, warnIfNoFileReaderAvailable;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
     $markingsSize = jq('#markingsSize');
@@ -49,6 +49,7 @@
     $markings = jq('#markings');
     currentFilename = "";
     init = function() {
+      warnIfNoFileReaderAvailable();
       loadSettings();
       initReadFile();
       initDragAndDrop();
@@ -84,7 +85,6 @@
       settingsString = localStorage['cell_counter_settings'];
       if (settingsString) {
         settings = JSON.parse(settingsString);
-        log(settings);
         $threshold.val(settings.threshold);
         $markingsSize.val(settings.markingsSize);
         $fadeThresholdImage.val(settings.fadeThresholdImage);
@@ -305,23 +305,19 @@
       filteredImage = Filters.filterCanvas(Filters.fastGaussian, canvas, convolutionMatrix);
       return ctx.putImageData(filteredImage, 0, 0);
     };
+    warnIfNoFileReaderAvailable = function() {
+      if (!window.FileReader) {
+        alert("No local file reading possible. Please use a newer version of firefox,google chrome or safari");
+        return jq('#openFile').replaceWith($canvas.html());
+      }
+    };
     return init();
-  };
-  isCanvasSupported = function() {
-    var elem;
-    elem = document.createElement('canvas');
-    return !!(elem.getContext && elem.getContext('2d'));
-  };
-  warnIfNoFileReaderAvailable = function() {
-    if (!window.FileReader) {
-      return alert("No local file reading possible. Please use a newer version of firefox,google chrome or safari");
-    }
   };
   jq(function() {
     if (isCanvasSupported()) {
-      warnIfNoFileReaderAvailable();
       return initCellCounter();
     } else {
+      jq('#openFile').hide();
       return alert("Please use a newer browser.");
     }
   });
