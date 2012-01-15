@@ -62,7 +62,7 @@ initCellCounter = () ->
     initSliders()
     loadImage('images/nora1.jpg')
     initOnResize()
-    $('#removeAllMarkings').click(removeAllMarkings)
+    $('#removeAllMarkings').click(onRemoveAllMarkings)
     $('#filterButton').click(filterImage2)
 
   initCropTool = ->

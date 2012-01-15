@@ -74,7 +74,7 @@
       initSliders();
       loadImage('images/nora1.jpg');
       initOnResize();
-      $('#removeAllMarkings').click(removeAllMarkings);
+      $('#removeAllMarkings').click(onRemoveAllMarkings);
       return $('#filterButton').click(filterImage2);
     };
     initCropTool = function() {
