@@ -7,8 +7,34 @@ h1 {
     padding: 0;
     font-size: 17px;
     color: #aaa;
+    float: left;
 }
 
+
+/* ------------------ Menu -------------------- */
+
+#menu {
+    text-align: right;
+
+}
+
+#menu:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#menu a {
+    margin-left: 1em;
+    background: #333;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* ------------------ Tools -------------------- */
 #tools {
     float: left;
     width: 200px;
@@ -22,13 +48,7 @@ h1 {
     margin-bottom: 1em;
 }
 
-label[for="redMarking"] {
-    color: red;
-}
 
-label[for="yellowMarking"] {
-    color: yellow;
-}
 
 label.rangeLabel {
     display: block;
@@ -39,12 +59,61 @@ input[type="range"] {
     width: 90%;
 }
 
+/* ------------------ Marking Type CheckBoxLabel -------------------- */
+
+.markingLabel0 {
+    color: red;
+}
+
+.markingLabel1 {
+    color: yellow;
+}
+
+.markingLabel2 {
+    color: #8a2be2;;
+}
+
+.markingLabel3 {
+    color: green;
+}
+
+.markingLabel4 {
+    color: blue;
+}
+
+/* ------------------ Marking Type Marker Colors -------------------- */
+
+
+.markingType0 {
+    background: red;
+}
+
+.markingType1 {
+    background: yellow;
+}
+
+.markingType2 {
+    background: #8a2be2;
+}
+
+.markingType3 {
+    background: green;
+}
+
+.markingType4 {
+    background: blue;
+}
+
+
+/* ------------------ Canvas Section -------------------- */
+
 #mainCanvasContainer {
     padding: 5px;
     border-radius: 4px;
     background: #444;
     margin-left: 230px;
     position: relative;
+    color: #eee;
 }
 
 #mainCanvasContainer2 {
@@ -82,18 +151,10 @@ canvas.ondragover {
     height: 9px;
     margin-top: -5px;
     margin-left: -5px;
-    background: red;
     border-radius: 10px;
     /*cursor: move;*/
 }
 
-.markingType0 {
-    background: red;
-}
-
-.markingType1 {
-    background: yellow;
-}
 
 
 /* -------------------------- Slider ---------------------- */
@@ -141,6 +202,26 @@ canvas.ondragover {
     background-color:transparent;
 }
 
+/* ------------------ Configure Dialog -------------------- */
 
+.modal {
+    background-color:#fff;
+    display:none;
+    width:350px;
+    padding:15px;
+    text-align:left;
+    border:2px solid #333;
 
+    opacity:0.95;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    -moz-box-shadow: 0 0 50px #ccc;
+    -webkit-box-shadow: 0 0 50px #ccc;
+}
 
+.modal h2 {
+    margin:0px;
+    padding:10px 0 10px 45px;
+    border-bottom:1px solid #333;
+    font-size:20px;
+}

@@ -3,13 +3,16 @@
   <component name="ChangeListManager">
     <list default="true" id="b602acb2-bbcf-496a-ad77-f8c754647aec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/css/style.css" afterPath="$PROJECT_DIR$/cell-counter/css/style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index-dev.html" afterPath="$PROJECT_DIR$/cell-counter/index-dev.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index.html" afterPath="$PROJECT_DIR$/cell-counter/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/filters-fast.js" afterPath="$PROJECT_DIR$/cell-counter/js/filters-fast.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/utils.js" afterPath="$PROJECT_DIR$/cell-counter/js/utils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/libs/common.js" afterPath="$PROJECT_DIR$/cell-counter/libs/common.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/libs/jquery.tools.min.js" afterPath="$PROJECT_DIR$/cell-counter/libs/jquery.tools.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/manifest.appcache" afterPath="$PROJECT_DIR$/cell-counter/manifest.appcache" />
     </list>
     <ignored path="shybyte-github.iws" />
@@ -29,37 +32,6 @@
   </component>
   <component name="FavoritesManager">
     <favorites_list name="shybyte-github" />
-  </component>
-  <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="44" selection-start="186" selection-end="186" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/cell-counter/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="10" selection-start="1405" selection-end="1405" vertical-scroll-proportion="0.4070278">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="manifest.appcache" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cell-counter/manifest.appcache">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -111,7 +83,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -138,62 +109,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="shybyte-github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="shybyte-github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cell-counter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="shybyte-github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="shybyte-github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cell-counter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="images" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="shybyte-github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="shybyte-github" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cell-counter" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -222,11 +140,10 @@
     <frame x="0" y="-3" width="1280" height="803" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24980111" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3293556" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -237,6 +154,7 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -313,9 +231,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cell-counter/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="10" selection-start="1405" selection-end="1405" vertical-scroll-proportion="0.4070278">
-          <folding />
-        </state>
+        <state line="29" column="0" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.23133236" />
       </provider>
     </entry>
   </component>

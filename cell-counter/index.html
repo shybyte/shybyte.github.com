@@ -9,17 +9,14 @@
 <body>
 <h1>Marco's Cell Counter</h1>
 
+<div id="menu">
+    <a href="#" id="cropImageLink" >Crop Image</a>
+    <a href="#" id="configureLink" rel="#configureDialog">Settings</a>
+</div>
+
 <div id="tools">
 
-    <div class="toolsSection">
-        <div>
-            <input id="redMarking" type="radio" name="markingColor" value="0" checked="checked">
-            <label for="redMarking">Count: <span id="cellCount0">0</span></label>
-        </div>
-        <div>
-            <input id="yellowMarking" type="radio" name="markingColor" value="1">
-            <label for="yellowMarking">Count: <span id="cellCount1">0</span></label>
-        </div>
+    <div class="toolsSection" id="markingTypeSelectors">
     </div>
 
     <div class="toolsSection">
@@ -38,22 +35,39 @@
     </div>
 
     <div class="toolsSection">
+        <button id="autoCountButton">Count Automatically</button>
         <button id="filterButton">Filter</button>
-
     </div>
 
 </div>
 
 <div id="mainCanvasContainer">
     <input id="openFile" type="file" value="Open Image" title="Open Image File"/>
+    <noscript>Please enable JavaScript.</noscript>
+    <div id="helpText" style="display: none"></div>
     <div id="mainCanvasContainer2">
         <canvas id="mainCanvas">
             Your browser is too old to run this application. Please use a newer browser.
             We recommend <a href="http://www.mozilla.org/">firefox</a> or <a href="http://www.google.de/chrome/">
-            google chrome</a>.</canvas>
+            google chrome</a>.
+        </canvas>
         <canvas id="filteredCanvas"></canvas>
         <div dropzone="true" id="markings"></div>
     </div>
 </div>
+
+<div class="modal" id="configureDialog" style="display: none;">
+    <h2>Configure Cell Counter</h2>
+
+    <div id="enabledMarkingTypesSelector">
+
+    </div>
+
+    <p>
+        <button id="configureOKButton" class="close"> OK </button>
+        <button class="close"> Cancel </button>
+    </p>
+</div>
+
 </body>
 </html>

@@ -1,6 +1,15 @@
 markingsIdCounter = 0
 draggedMarking = null
 
+ALL_MARKING_TYPES = ['0', '1', '2', '3', '4']
+enabledMarkingTypes = ['0','1']
+
+TOOL_MODE =
+  MARKING:"marking"
+  CROP:"crop"
+toolMode = TOOL_MODE.MARKING
+
+
 class Marking
   constructor:(@pos, @type) ->
     self = this
@@ -43,14 +52,86 @@ initCellCounter = () ->
   init = ->
     warnIfNoFileReaderAvailable()
     loadSettings()
+    initConfigureDialog(configureEnabledMarkingTypes)
+    configureEnabledMarkingTypes()
     initReadFile()
     initDragAndDrop()
     initManualCounter()
+    initAutoCounter()
+    initCropTool()
     initSliders()
     loadImage('images/nora1.jpg')
     initOnResize()
-    jq('#removeAllMarkings').click(removeAllMarkings)
-    jq('#filterButton').click(filterImage2)
+    $('#removeAllMarkings').click(removeAllMarkings)
+    $('#filterButton').click(filterImage2)
+
+  initCropTool = ->
+    $helpText = $('#helpText')
+    points = null
+    $('#cropImageLink').click ->
+      points = []
+      toolMode = TOOL_MODE.CROP
+      $helpText.text("Select the top left point!")
+      $helpText.show("slow")
+    $markings.click( (e)->
+      if toolMode == TOOL_MODE.CROP
+        points.push(eventPosInImage(e))
+        if points.length == 1
+          $helpText.text("Select the bottom right point!")
+        else if points.length>1
+          $helpText.hide()
+          toolMode = TOOL_MODE.MARKING
+          fixPointOrder()
+          cropImage()
+    )
+    fixPointOrder = ->
+      if points[1].x<points[0].x
+        tempX = points[0].x
+        points[0].x = points[1].x
+        points[1].x = tempX
+      if points[1].y<points[0].y
+        tempY = points[0].y
+        points[0].y = points[1].y
+        points[1].y = tempY
+    cropImage = ->
+      newW = points[1].x-points[0].x
+      newH = points[1].y-points[0].y
+      imageData = ctx.getImageData(points[0].x, points[0].y, newW, newH)
+      canvas.width = newW
+      canvas.height = newH
+      #ctx.drawImage(canvasClone, points[0].x, points[0].y, newW, newH, 0, 0, newW, newH);
+      ctx.putImageData(imageData, 0, 0);
+      filterImage()
+      cropMarkins()
+    cropMarkins = ->
+      for marking in markings
+        oldPos = marking.pos
+        newPos = {
+          x: oldPos.x-points[0].x
+          y: oldPos.y-points[0].y
+        }
+        if 0<newPos.x<canvas.width and 0<newPos.y<canvas.height
+          marking.move(newPos)
+          marking.updateScreenPos(canvas,$canvas)
+        else
+          marking.el.remove()
+          marking.removed = true
+      markings =  (m for m in markings when !m.removed)
+      showCellCount()
+
+
+  initAutoCounter =->
+    autoCount = ->
+      removeAllMarkings();
+      cgs = Filters.compressedGrayScaleFromRed(ctx.getImageData(0, 0, canvas.width, canvas.height))
+      filteredCGS = cgs;
+      filteredCGS = Filters.meanCGSRepeated(filteredCGS,4,4)
+      filteredCGS = Filters.peaksCGS(filteredCGS,$threshold.val(),3)
+      selectedMarkingType = getSelectedMarkingType()
+      for peak in filteredCGS.peaks
+        addMarking(peak, selectedMarkingType)
+      saveMarkings()
+    $('#autoCountButton').click(autoCount)
 
   initOnResize = ->
     jq(window).resize((e)->
@@ -61,9 +142,10 @@ initCellCounter = () ->
 
   saveSettings = ->
     settings = {
-      markingsSize:$markingsSize.val()
-      threshold:$threshold.val()
-      fadeThresholdImage:$fadeThresholdImage.val()
+    markingsSize:$markingsSize.val()
+    threshold:$threshold.val()
+    fadeThresholdImage:$fadeThresholdImage.val()
+    enabledMarkingTypes:enabledMarkingTypes
     }
     localStorage['cell_counter_settings'] = JSON.stringify(settings)
 
@@ -72,11 +154,31 @@ initCellCounter = () ->
     settingsString = localStorage['cell_counter_settings']
     if settingsString
       settings = JSON.parse(settingsString)
+      enabledMarkingTypes = settings.enabledMarkingTypes || ["0", "1"]
       $threshold.val(settings.threshold)
       $markingsSize.val(settings.markingsSize)
       $fadeThresholdImage.val(settings.fadeThresholdImage)
       onChangeMarkingsSize()
       changeFading()
+    configureEnabledMarkingTypes()
+
+  configureEnabledMarkingTypes = ->
+    saveSettings()
+    $markingTypeSelectors = $('#markingTypeSelectors')
+    prevSelectedMarkingType = getSelectedMarkingType()
+    $markingTypeSelectors.empty()
+    for markingType in enabledMarkingTypes
+      row = """<div>
+                      <input id="markingTypeSelector#{markingType}" type="radio" name="markingType" value="#{markingType}">
+                      <label for="markingTypeSelector#{markingType}" class="markingLabel#{markingType}">Count: <span id="cellCount#{markingType}">0</span></label>
+                      </div>"""
+      $markingTypeSelectors.append(row)
+    selectedMarkingType = if prevSelectedMarkingType in enabledMarkingTypes
+      prevSelectedMarkingType
+    else
+      enabledMarkingTypes[0]
+    $("#markingTypeSelector#{selectedMarkingType}").prop('checked', true)
+    showCellCount()
 
 
   loadMarkings = ()->
@@ -143,11 +245,12 @@ initCellCounter = () ->
 
   initManualCounter = ->
     $markings.click((e) ->
-        pos = eventPosInImage(e)
-        if e.ctrlKey and markings.length > 0
-          removeMarking(pos)
-        else
-          addMarkingWithSelectedType(pos)
+        if toolMode == TOOL_MODE.MARKING
+          pos = eventPosInImage(e)
+          if e.ctrlKey and markings.length > 0
+            removeMarking(pos)
+          else
+            addMarkingWithSelectedType(pos)
     )
     $markings.bind('contextmenu', (e)->
         e.preventDefault()
@@ -178,8 +281,10 @@ initCellCounter = () ->
     jq('#filteredCanvas').css('opacity', v2)
 
   addMarkingWithSelectedType = (pos) ->
-    addMarking(pos, jq('input:radio[name=markingColor]:checked').val())
+    addMarking(pos, getSelectedMarkingType())
     saveMarkings()
+
+  getSelectedMarkingType = -> jq('input:radio[name=markingType]:checked').val()
 
   addMarking = (pos, type) ->
     marking = new Marking(pos, type)
@@ -211,8 +316,8 @@ initCellCounter = () ->
     groupedMarkings = _.groupBy(markings, 'type')
     countByCellType = (type2) ->
       (groupedMarkings[type2]?.length) ? 0
-    jq('#cellCount0').text(countByCellType(0))
-    jq('#cellCount1').text(countByCellType(1))
+    for markingType in enabledMarkingTypes
+      jq("#cellCount#{markingType}").text(countByCellType(markingType))
 
   findNearestMarking = (x, y) ->
     _.min(markings, (marking) ->
@@ -240,8 +345,8 @@ initCellCounter = () ->
     img.src = src
 
   filterImage = ->
-    filteredCanvas.width = currentImg.width
-    filteredCanvas.height = currentImg.height
+    filteredCanvas.width = canvas.width
+    filteredCanvas.height = canvas.height
     filteredImage = Filters.filterCanvas(Filters.thresholdRG, canvas, {threshold:$threshold.val()})
     ctxFiltered.putImageData(filteredImage, 0, 0)
 
@@ -254,16 +359,52 @@ initCellCounter = () ->
 
   warnIfNoFileReaderAvailable = ->
     if(!window.FileReader)
-      alert("No local file reading possible. Please use a newer version of firefox,google chrome or safari")
-      jq('#openFile').replaceWith($canvas.html());
+      noFileReader = "No local file reading possible. "
+      alert(noFileReader + BROWSER_TO_OLD_MESSAGE)
+      jq('#openFile').replaceWith(noFileReader + $canvas.html())
+    ;
 
   init()
 
+
+initConfigureDialog = (onNewEnabledMarkingTypes)->
+  $box = $('#enabledMarkingTypesSelector')
+  $("#configureLink").click(
+    ->
+      $box.empty()
+      for markingType in ALL_MARKING_TYPES
+        checked = if markingType in enabledMarkingTypes then "checked" else ""
+        markingRow =
+          """<div>
+              <input id="enableMarkingType#{markingType}" type="checkbox" value="#{markingType}" #{checked}>
+              <label for="enableMarkingType#{markingType}" class="markingLabel#{markingType}">Cell Type #{markingType}</label>
+                                           </div>
+                                        """
+        $box.append(markingRow)
+  ).overlay({
+    mask:{
+    color:'#ebecff',
+    loadSpeed:200,
+    opacity:0.98
+    },
+    closeOnClick:false
+    })
+
+  jq('#configureOKButton').click(->
+      enabledMarkingTypes = []
+      $('input:checked', $box).each((i, el)->
+          enabledMarkingTypes.push($(el).val())
+      )
+      onNewEnabledMarkingTypes()
+  )
+
+
+BROWSER_TO_OLD_MESSAGE = "Your browser is too old. Please use a newer version of firefox, google chrome or opera."
 
 jq ->
   if (isCanvasSupported())
     initCellCounter()
   else
     jq('#openFile').hide()
-    alert("Please use a newer browser.")
+    alert(BROWSER_TO_OLD_MESSAGE)
 

@@ -1,4 +1,4 @@
-jQuery.noConflict();
+//jQuery.noConflict();
 jq = jQuery;
 
 function log(o) {
