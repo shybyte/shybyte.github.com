@@ -37,18 +37,18 @@
     Marking.prototype.move = function(pos) {
       return this.pos = pos;
     };
-    Marking.prototype.updateScreenPos = function(canvas, $canvas) {
+    Marking.prototype.updateScreenPos = function(canvas, $canvas, cropWindowPos) {
       var screenPos;
       screenPos = {
-        left: this.pos.x / canvas.width * $canvas.width(),
-        top: this.pos.y / canvas.height * $canvas.height()
+        left: (this.pos.x - cropWindowPos.x) / canvas.width * $canvas.width(),
+        top: (this.pos.y - cropWindowPos.y) / canvas.height * $canvas.height()
       };
       return this.el.css(screenPos);
     };
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, configureEnabledMarkingTypes, ctx, ctxFiltered, currentFilename, currentImg, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, getSelectedMarkingType, init, initAutoCounter, initCropTool, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount, warnIfNoFileReaderAvailable;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, configureEnabledMarkingTypes, cropWindowPos, ctx, ctxFiltered, currentFilename, currentImg, eventPosInCanvas, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, getSelectedMarkingType, init, initAutoCounter, initCropTool, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount, warnIfNoFileReaderAvailable;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
     $markingsSize = jq('#markingsSize');
@@ -58,6 +58,10 @@
     filteredCanvas = jq('#filteredCanvas').get(0);
     ctx = canvas.getContext('2d');
     ctxFiltered = filteredCanvas.getContext('2d');
+    cropWindowPos = {
+      x: 0,
+      y: 0
+    };
     markings = [];
     $markings = jq('#markings');
     currentFilename = "";
@@ -78,22 +82,46 @@
       return $('#filterButton').click(filterImage2);
     };
     initCropTool = function() {
-      var $helpText, cropImage, cropMarkins, fixPointOrder, points;
+      var $cropSelection, $helpText, cropImage, cropMarkins, cropStartPosInCanvas, fixPointOrder, points;
       $helpText = $('#helpText');
+      $cropSelection = $('#cropSelection');
       points = null;
+      cropStartPosInCanvas = null;
       $('#cropImageLink').click(function() {
         points = [];
         toolMode = TOOL_MODE.CROP;
         $helpText.text("Select the top left point!");
         return $helpText.show("slow");
       });
+      $markings.mousemove(function(e) {
+        var h, pos, w;
+        if (toolMode === TOOL_MODE.CROP && points.length === 1) {
+          pos = eventPosInCanvas(e);
+          w = pos.x - cropStartPosInCanvas.x;
+          h = pos.y - cropStartPosInCanvas.y;
+          return $cropSelection.css({
+            width: w + 'px',
+            height: h + 'px'
+          });
+        }
+      });
       $markings.click(function(e) {
+        var posInCanvas;
         if (toolMode === TOOL_MODE.CROP) {
+          posInCanvas = eventPosInCanvas(e);
+          $cropSelection.css({
+            top: posInCanvas.y,
+            left: posInCanvas.x,
+            width: '5px',
+            height: '5px'
+          }).show();
+          cropStartPosInCanvas = posInCanvas;
           points.push(eventPosInImage(e));
           if (points.length === 1) {
             return $helpText.text("Select the bottom right point!");
           } else if (points.length > 1) {
             $helpText.hide();
+            $cropSelection.hide('slow');
             toolMode = TOOL_MODE.MARKING;
             fixPointOrder();
             return cropImage();
@@ -117,7 +145,11 @@
         var imageData, newH, newW;
         newW = points[1].x - points[0].x;
         newH = points[1].y - points[0].y;
-        imageData = ctx.getImageData(points[0].x, points[0].y, newW, newH);
+        imageData = ctx.getImageData(points[0].x - cropWindowPos.x, points[0].y - cropWindowPos.y, newW, newH);
+        cropWindowPos = {
+          x: points[0].x,
+          y: points[0].y
+        };
         canvas.width = newW;
         canvas.height = newH;
         ctx.putImageData(imageData, 0, 0);
@@ -125,17 +157,12 @@
         return cropMarkins();
       };
       return cropMarkins = function() {
-        var m, marking, newPos, oldPos, _i, _len, _ref, _ref2;
+        var m, marking, pos, _i, _len, _ref, _ref2;
         for (_i = 0, _len = markings.length; _i < _len; _i++) {
           marking = markings[_i];
-          oldPos = marking.pos;
-          newPos = {
-            x: oldPos.x - points[0].x,
-            y: oldPos.y - points[0].y
-          };
-          if ((0 < (_ref = newPos.x) && _ref < canvas.width) && (0 < (_ref2 = newPos.y) && _ref2 < canvas.height)) {
-            marking.move(newPos);
-            marking.updateScreenPos(canvas, $canvas);
+          pos = marking.pos;
+          if ((cropWindowPos.x <= (_ref = pos.x) && _ref < cropWindowPos.x + canvas.width) && (cropWindowPos.y <= (_ref2 = pos.y) && _ref2 < cropWindowPos.y + canvas.height)) {
+            marking.updateScreenPos(canvas, $canvas, cropWindowPos);
           } else {
             marking.el.remove();
             marking.removed = true;
@@ -152,6 +179,7 @@
           }
           return _results;
         })();
+        saveMarkings();
         return showCellCount();
       };
     };
@@ -168,7 +196,10 @@
         _ref = filteredCGS.peaks;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           peak = _ref[_i];
-          addMarking(peak, selectedMarkingType);
+          addMarking({
+            x: peak.x + cropWindowPos.x,
+            y: peak.y + cropWindowPos.y
+          }, selectedMarkingType);
         }
         return saveMarkings();
       };
@@ -180,7 +211,7 @@
         _results = [];
         for (_i = 0, _len = markings.length; _i < _len; _i++) {
           marking = markings[_i];
-          _results.push(marking.updateScreenPos(canvas, $canvas));
+          _results.push(marking.updateScreenPos(canvas, $canvas, cropWindowPos));
         }
         return _results;
       });
@@ -319,20 +350,20 @@
         return removeMarking(eventPosInImage(e));
       });
     };
-    eventPosInImage = function(e) {
-      var eventPosInCanvas, p;
-      eventPosInCanvas = function(e) {
-        var canvasOffset;
-        canvasOffset = $canvas.offset();
-        return {
-          x: e.pageX - canvasOffset.left,
-          y: e.pageY - canvasOffset.top
-        };
+    eventPosInCanvas = function(e) {
+      var canvasOffset;
+      canvasOffset = $canvas.offset();
+      return {
+        x: e.pageX - canvasOffset.left,
+        y: e.pageY - canvasOffset.top
       };
+    };
+    eventPosInImage = function(e) {
+      var p;
       p = eventPosInCanvas(e);
       return {
-        x: Math.round(p.x / $canvas.width() * canvas.width),
-        y: Math.round(p.y / $canvas.height() * canvas.height)
+        x: Math.round(p.x / $canvas.width() * canvas.width) + cropWindowPos.x,
+        y: Math.round(p.y / $canvas.height() * canvas.height) + cropWindowPos.y
       };
     };
     changeFading = function() {
@@ -361,7 +392,7 @@
       marking = new Marking(pos, type);
       markings.push(marking);
       $markings.append(marking.el);
-      marking.updateScreenPos(canvas, $canvas);
+      marking.updateScreenPos(canvas, $canvas, cropWindowPos);
       return showCellCount();
     };
     removeMarking = function(pos) {

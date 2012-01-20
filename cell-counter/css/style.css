@@ -155,7 +155,12 @@ canvas.ondragover {
     /*cursor: move;*/
 }
 
-
+#cropSelection  {
+    border: 1px solid red;
+    background: #aaa;
+    opacity: 0.5;
+    position: absolute;
+}
 
 /* -------------------------- Slider ---------------------- */
 
