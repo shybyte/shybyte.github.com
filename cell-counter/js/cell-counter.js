@@ -48,17 +48,18 @@
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, configureEnabledMarkingTypes, cropWindowPos, ctx, ctxFiltered, currentFilename, currentImg, eventPosInCanvas, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, getSelectedMarkingType, init, initAutoCounter, initCropTool, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount, warnIfNoFileReaderAvailable;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $restoreOriginalImageLink, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, configureEnabledMarkingTypes, cropWindow, ctx, ctxFiltered, currentFilename, currentImg, eventPosInCanvas, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, getSelectedMarkingType, init, initAutoCounter, initCropTool, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onImageLoaded, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount, warnIfNoFileReaderAvailable;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
     $markingsSize = jq('#markingsSize');
+    $restoreOriginalImageLink = $('#restoreOriginalImageLink');
     currentImg = null;
     $canvas = jq('#mainCanvas');
     canvas = $canvas.get(0);
     filteredCanvas = jq('#filteredCanvas').get(0);
     ctx = canvas.getContext('2d');
     ctxFiltered = filteredCanvas.getContext('2d');
-    cropWindowPos = {
+    cropWindow = {
       x: 0,
       y: 0
     };
@@ -145,24 +146,27 @@
         var imageData, newH, newW;
         newW = points[1].x - points[0].x;
         newH = points[1].y - points[0].y;
-        imageData = ctx.getImageData(points[0].x - cropWindowPos.x, points[0].y - cropWindowPos.y, newW, newH);
-        cropWindowPos = {
+        imageData = ctx.getImageData(points[0].x - cropWindow.x, points[0].y - cropWindow.y, newW, newH);
+        cropWindow = {
           x: points[0].x,
-          y: points[0].y
+          y: points[0].y,
+          width: newW,
+          height: newH
         };
         canvas.width = newW;
         canvas.height = newH;
         ctx.putImageData(imageData, 0, 0);
         filterImage();
-        return cropMarkins();
+        cropMarkins();
+        return $restoreOriginalImageLink.show('slow');
       };
-      return cropMarkins = function() {
+      cropMarkins = function() {
         var m, marking, pos, _i, _len, _ref, _ref2;
         for (_i = 0, _len = markings.length; _i < _len; _i++) {
           marking = markings[_i];
           pos = marking.pos;
-          if ((cropWindowPos.x <= (_ref = pos.x) && _ref < cropWindowPos.x + canvas.width) && (cropWindowPos.y <= (_ref2 = pos.y) && _ref2 < cropWindowPos.y + canvas.height)) {
-            marking.updateScreenPos(canvas, $canvas, cropWindowPos);
+          if ((cropWindow.x <= (_ref = pos.x) && _ref < cropWindow.x + canvas.width) && (cropWindow.y <= (_ref2 = pos.y) && _ref2 < cropWindow.y + canvas.height)) {
+            marking.updateScreenPos(canvas, $canvas, cropWindow);
           } else {
             marking.el.remove();
             marking.removed = true;
@@ -182,6 +186,10 @@
         saveMarkings();
         return showCellCount();
       };
+      return $restoreOriginalImageLink.click((function() {
+        $restoreOriginalImageLink.hide('slow');
+        return onImageLoaded(currentImg);
+      }));
     };
     initAutoCounter = function() {
       var autoCount;
@@ -197,8 +205,8 @@
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           peak = _ref[_i];
           addMarking({
-            x: peak.x + cropWindowPos.x,
-            y: peak.y + cropWindowPos.y
+            x: peak.x + cropWindow.x,
+            y: peak.y + cropWindow.y
           }, selectedMarkingType);
         }
         return saveMarkings();
@@ -211,7 +219,7 @@
         _results = [];
         for (_i = 0, _len = markings.length; _i < _len; _i++) {
           marking = markings[_i];
-          _results.push(marking.updateScreenPos(canvas, $canvas, cropWindowPos));
+          _results.push(marking.updateScreenPos(canvas, $canvas, cropWindow));
         }
         return _results;
       });
@@ -362,8 +370,8 @@
       var p;
       p = eventPosInCanvas(e);
       return {
-        x: Math.round(p.x / $canvas.width() * canvas.width) + cropWindowPos.x,
-        y: Math.round(p.y / $canvas.height() * canvas.height) + cropWindowPos.y
+        x: Math.round(p.x / $canvas.width() * canvas.width) + cropWindow.x,
+        y: Math.round(p.y / $canvas.height() * canvas.height) + cropWindow.y
       };
     };
     changeFading = function() {
@@ -392,7 +400,7 @@
       marking = new Marking(pos, type);
       markings.push(marking);
       $markings.append(marking.el);
-      marking.updateScreenPos(canvas, $canvas, cropWindowPos);
+      marking.updateScreenPos(canvas, $canvas, cropWindow);
       return showCellCount();
     };
     removeMarking = function(pos) {
@@ -451,20 +459,26 @@
     };
     loadImage = function(src) {
       var img;
+      $restoreOriginalImageLink.hide('slow');
       img = new Image();
       img.onload = function() {
-        cropWindowPos = {
-          x: 0,
-          y: 0
-        };
-        currentImg = img;
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        loadMarkings();
-        return filterImage();
+        return onImageLoaded(img);
       };
       return img.src = src;
+    };
+    onImageLoaded = function(img) {
+      cropWindow = {
+        x: 0,
+        y: 0,
+        width: img.width,
+        height: img.height
+      };
+      currentImg = img;
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0);
+      loadMarkings();
+      return filterImage();
     };
     filterImage = function() {
       var filteredImage;

@@ -42,13 +42,14 @@ initCellCounter = () ->
   $threshold = jq('#threshold')
   $fadeThresholdImage = jq('#fadeThresholdImage')
   $markingsSize = jq('#markingsSize')
+  $restoreOriginalImageLink = $('#restoreOriginalImageLink')
   currentImg = null
   $canvas = jq('#mainCanvas')
   canvas = $canvas.get(0)
   filteredCanvas = jq('#filteredCanvas').get(0)
   ctx = canvas.getContext('2d')
   ctxFiltered = filteredCanvas.getContext('2d')
-  cropWindowPos = {
+  cropWindow = {
     x: 0,
     y: 0
   }
@@ -116,26 +117,32 @@ initCellCounter = () ->
     cropImage = ->
       newW = points[1].x-points[0].x
       newH = points[1].y-points[0].y
-      imageData = ctx.getImageData(points[0].x-cropWindowPos.x, points[0].y-cropWindowPos.y, newW, newH)
-      cropWindowPos = {x: points[0].x, y: points[0].y}
+      imageData = ctx.getImageData(points[0].x-cropWindow.x, points[0].y-cropWindow.y, newW, newH)
+      cropWindow = {x: points[0].x, y: points[0].y, width: newW, height: newH}
       canvas.width = newW
       canvas.height = newH
       #ctx.drawImage(canvasClone, points[0].x, points[0].y, newW, newH, 0, 0, newW, newH);
       ctx.putImageData(imageData, 0, 0);
       filterImage()
       cropMarkins()
+      $restoreOriginalImageLink.show('slow')
+
     cropMarkins = ->
       for marking in markings
         pos = marking.pos
-        if (cropWindowPos.x<=pos.x<cropWindowPos.x+canvas.width and
-            cropWindowPos.y<=pos.y<cropWindowPos.y+canvas.height)
-          marking.updateScreenPos(canvas,$canvas,cropWindowPos)
+        if (cropWindow.x<=pos.x<cropWindow.x+canvas.width and
+            cropWindow.y<=pos.y<cropWindow.y+canvas.height)
+          marking.updateScreenPos(canvas,$canvas,cropWindow)
         else
           marking.el.remove()
           marking.removed = true
       markings =  (m for m in markings when !m.removed)
       saveMarkings()
       showCellCount()
+    $restoreOriginalImageLink.click ( ->
+      $restoreOriginalImageLink.hide('slow')
+      onImageLoaded(currentImg)
+    )
 
 
   initAutoCounter =->
@@ -148,8 +155,8 @@ initCellCounter = () ->
       selectedMarkingType = getSelectedMarkingType()
       for peak in filteredCGS.peaks
         addMarking({
-          x: peak.x+cropWindowPos.x
-          y: peak.y+cropWindowPos.y
+          x: peak.x+cropWindow.x
+          y: peak.y+cropWindow.y
         }, selectedMarkingType)
       saveMarkings()
     $('#autoCountButton').click(autoCount)
@@ -158,7 +165,7 @@ initCellCounter = () ->
     jq(window).resize((e)->
         #updateMarkingsScreenPos
         for marking in markings
-          marking.updateScreenPos(canvas, $canvas,cropWindowPos)
+          marking.updateScreenPos(canvas, $canvas,cropWindow)
     )
 
   saveSettings = ->
@@ -285,8 +292,8 @@ initCellCounter = () ->
   eventPosInImage = (e)->
     p = eventPosInCanvas(e)
     return {
-    x:Math.round(p.x / $canvas.width() * canvas.width)+cropWindowPos.x
-    y:Math.round(p.y / $canvas.height() * canvas.height)+cropWindowPos.y
+    x:Math.round(p.x / $canvas.width() * canvas.width)+cropWindow.x
+    y:Math.round(p.y / $canvas.height() * canvas.height)+cropWindow.y
     }
 
 
@@ -312,7 +319,7 @@ initCellCounter = () ->
     marking = new Marking(pos, type)
     markings.push(marking)
     $markings.append(marking.el)
-    marking.updateScreenPos(canvas, $canvas,cropWindowPos)
+    marking.updateScreenPos(canvas, $canvas,cropWindow)
     showCellCount()
 
   removeMarking = (pos) ->
@@ -356,16 +363,21 @@ initCellCounter = () ->
     reader.readAsDataURL(file)
 
   loadImage = (src) ->
+    $restoreOriginalImageLink.hide('slow')
     img = new Image()
     img.onload = ->
-      cropWindowPos = {x: 0, y: 0}
-      currentImg = img
-      canvas.width = img.width
-      canvas.height = img.height
-      ctx.drawImage(img, 0, 0)
-      loadMarkings()
-      filterImage()
+      onImageLoaded(img)
     img.src = src
+
+  onImageLoaded = (img)->
+    cropWindow = {x: 0, y: 0, width:img.width, height:img.height}
+    currentImg = img
+    canvas.width = img.width
+    canvas.height = img.height
+    ctx.drawImage(img, 0, 0)
+    loadMarkings()
+    filterImage()
+
 
   filterImage = ->
     filteredCanvas.width = canvas.width

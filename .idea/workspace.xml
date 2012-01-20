@@ -3,10 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="b602acb2-bbcf-496a-ad77-f8c754647aec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index-dev.html" afterPath="$PROJECT_DIR$/cell-counter/index-dev.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index.html" afterPath="$PROJECT_DIR$/cell-counter/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/manifest.appcache" afterPath="$PROJECT_DIR$/cell-counter/manifest.appcache" />
     </list>
     <ignored path="shybyte-github.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,6 +29,9 @@
   <component name="FavoritesManager">
     <favorites_list name="shybyte-github" />
   </component>
+  <component name="FileEditorManager">
+    <leaf />
+  </component>
   <component name="FindManager">
     <FindUsagesManager>
       <setting name="OPEN_NEW_TAB" value="false" />
@@ -42,6 +48,8 @@
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/cell-counter/manifest.appcache" />
         <option value="$PROJECT_DIR$/cell-counter/index.html" />
+        <option value="$PROJECT_DIR$/cell-counter/index-dev.html" />
+        <option value="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
       </list>
     </option>
   </component>
@@ -223,7 +231,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="lots of stuff" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed crop/save bug" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -244,6 +252,7 @@
     <MESSAGE value="Removed logging" />
     <MESSAGE value="warning for old browser" />
     <MESSAGE value="lots of stuff" />
+    <MESSAGE value="fixed crop/save bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -262,6 +271,20 @@
     <entry file="file://$PROJECT_DIR$/cell-counter/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state line="29" column="0" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.23133236" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cell-counter/index-dev.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="29" selection-start="868" selection-end="868" vertical-scroll-proportion="0.2238806">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cell-counter/js/cell-counter.coffee">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="142" column="0" selection-start="4257" selection-end="4257" vertical-scroll-proportion="0.64841497">
+          <folding />
+        </state>
       </provider>
     </entry>
   </component>
