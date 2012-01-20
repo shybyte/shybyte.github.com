@@ -453,6 +453,10 @@
       var img;
       img = new Image();
       img.onload = function() {
+        cropWindowPos = {
+          x: 0,
+          y: 0
+        };
         currentImg = img;
         canvas.width = img.width;
         canvas.height = img.height;

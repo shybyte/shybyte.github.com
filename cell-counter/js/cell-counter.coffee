@@ -358,6 +358,7 @@ initCellCounter = () ->
   loadImage = (src) ->
     img = new Image()
     img.onload = ->
+      cropWindowPos = {x: 0, y: 0}
       currentImg = img
       canvas.width = img.width
       canvas.height = img.height
