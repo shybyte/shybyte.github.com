@@ -265,11 +265,15 @@ initCellCounter = () ->
 
   onChangeMarkingsSize = ->
     cssRule = getCSSRule('.marking')
-    newMarkingsSize = $markingsSize.val()
-    cssRule.style.width = newMarkingsSize + 'px'
-    cssRule.style.height = newMarkingsSize + 'px'
-    cssRule.style.marginLeft = -newMarkingsSize / 2 + 'px'
-    cssRule.style.marginTop = -newMarkingsSize / 2 + 'px'
+    if cssRule
+      newMarkingsSize = $markingsSize.val()
+      cssRule.style.width = newMarkingsSize + 'px'
+      cssRule.style.height = newMarkingsSize + 'px'
+      cssRule.style.marginLeft = -newMarkingsSize / 2 + 'px'
+      cssRule.style.marginTop = -newMarkingsSize / 2 + 'px'
+    else
+      log('Try again to change marking size ...')
+      setTimeout(onChangeMarkingsSize,1000)
 
   initManualCounter = ->
     $markings.click((e) ->
@@ -436,8 +440,18 @@ initConfigureDialog = (onNewEnabledMarkingTypes)->
 
 BROWSER_TO_OLD_MESSAGE = "Your browser is too old. Please use a newer version of firefox, google chrome or opera."
 
+initUpdateMessage = ->
+  window.applicationCache.addEventListener('updateready', ->
+      if window.applicationCache.status == window.applicationCache.UPDATEREADY
+        window.applicationCache.swapCache()
+        if confirm('A new version of "Marcos Cell Counter" is available. Load it now?')
+          window.location.reload()
+    ,false)
+
+
 jq ->
   if (isCanvasSupported())
+    initUpdateMessage()
     initCellCounter()
   else
     jq('#openFile').hide()
