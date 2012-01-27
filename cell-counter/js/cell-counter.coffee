@@ -88,6 +88,7 @@ initCellCounter = () ->
 
 
   initCropTool = ->
+    $canvasAndHelpContainer = $('#canvasAndHelpContainer')
     loadSavedCropWindow()
     $helpText = $('#helpText')
     $cropSelection = $('#cropSelection')
@@ -96,8 +97,15 @@ initCellCounter = () ->
     $('#cropImageLink').click ->
       points = []
       toolMode = TOOL_MODE.CROP
-      $helpText.text("Select the top left point!")
+      $helpText.text("Click the top left point! Press the ESC key to cancel cropping.")
       $helpText.show("slow")
+      $canvasAndHelpContainer.expose({
+        color: '#333',
+        onClose: ->
+          $helpText.hide()
+          $cropSelection.hide('slow')
+          toolMode = TOOL_MODE.MARKING
+      })
     $markings.mousemove( (e)->
         if toolMode == TOOL_MODE.CROP and points.length == 1
           pos = eventPosInCanvas(e)
@@ -112,11 +120,9 @@ initCellCounter = () ->
         cropStartPosInCanvas = posInCanvas;
         points.push(eventPosInImage(e))
         if points.length == 1
-          $helpText.text("Select the bottom right point!")
+          $helpText.text("Click the bottom right point! Press the ESC key to cancel cropping.")
         else if points.length>1
-          $helpText.hide()
-          $cropSelection.hide('slow')
-          toolMode = TOOL_MODE.MARKING
+          $.mask.close();
           fixPointOrder()
           cropImage({x:points[0].x,y:points[0].y,width:points[1].x-points[0].x,height:points[1].y-points[0].y})
     )

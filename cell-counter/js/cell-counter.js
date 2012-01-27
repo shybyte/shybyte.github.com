@@ -96,7 +96,8 @@
       });
     };
     initCropTool = function() {
-      var $cropSelection, $helpText, cropImage, cropMarkins, cropStartPosInCanvas, fixPointOrder, points;
+      var $canvasAndHelpContainer, $cropSelection, $helpText, cropImage, cropMarkins, cropStartPosInCanvas, fixPointOrder, points;
+      $canvasAndHelpContainer = $('#canvasAndHelpContainer');
       loadSavedCropWindow();
       $helpText = $('#helpText');
       $cropSelection = $('#cropSelection');
@@ -105,8 +106,16 @@
       $('#cropImageLink').click(function() {
         points = [];
         toolMode = TOOL_MODE.CROP;
-        $helpText.text("Select the top left point!");
-        return $helpText.show("slow");
+        $helpText.text("Click the top left point! Press the ESC key to cancel cropping.");
+        $helpText.show("slow");
+        return $canvasAndHelpContainer.expose({
+          color: '#333',
+          onClose: function() {
+            $helpText.hide();
+            $cropSelection.hide('slow');
+            return toolMode = TOOL_MODE.MARKING;
+          }
+        });
       });
       $markings.mousemove(function(e) {
         var h, pos, w;
@@ -133,11 +142,9 @@
           cropStartPosInCanvas = posInCanvas;
           points.push(eventPosInImage(e));
           if (points.length === 1) {
-            return $helpText.text("Select the bottom right point!");
+            return $helpText.text("Click the bottom right point! Press the ESC key to cancel cropping.");
           } else if (points.length > 1) {
-            $helpText.hide();
-            $cropSelection.hide('slow');
-            toolMode = TOOL_MODE.MARKING;
+            $.mask.close();
             fixPointOrder();
             return cropImage({
               x: points[0].x,

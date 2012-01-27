@@ -51,16 +51,18 @@
 <div id="mainCanvasContainer">
     <input id="openFile" type="file" value="Open Image" title="Open Image File"/>
     <noscript>Please enable JavaScript.</noscript>
-    <div id="helpText" style="display: none"></div>
-    <div id="mainCanvasContainer2">
-        <canvas id="mainCanvas">
-            Your browser is too old to run this application. Please use a newer browser.
-            We recommend <a href="http://www.mozilla.org/">firefox</a> or <a href="http://www.google.de/chrome/">
-            google chrome</a>.
-        </canvas>
-        <canvas id="filteredCanvas"></canvas>
-        <div dropzone="true" id="markings">
-            <div id="cropSelection" style="display:none;"></div>
+    <div id="canvasAndHelpContainer">
+        <div id="helpText" style="display: none"></div>
+        <div id="mainCanvasContainer2">
+            <canvas id="mainCanvas">
+                Your browser is too old to run this application. Please use a newer browser.
+                We recommend <a href="http://www.mozilla.org/">firefox</a> or <a href="http://www.google.de/chrome/">
+                google chrome</a>.
+            </canvas>
+            <canvas id="filteredCanvas"></canvas>
+            <div dropzone="true" id="markings">
+                <div id="cropSelection" style="display:none;"></div>
+            </div>
         </div>
     </div>
 </div>
