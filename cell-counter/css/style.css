@@ -1,5 +1,6 @@
 body {
     background-color: #222;
+    font-size: 14px;
 }
 
 h1 {
@@ -10,12 +11,14 @@ h1 {
     float: left;
 }
 
+button {
+    font-size: 13px;
+}
 
 /* ------------------ Menu -------------------- */
 
 #menu {
     text-align: right;
-
 }
 
 #menu:after {
@@ -27,17 +30,17 @@ h1 {
 }
 
 #menu a {
-    margin-left: 1em;
+    margin-left: 0.5em;
     background: #333;
     color: #ffffff;
     border-radius: 5px;
-    padding: 5px;
+    padding: 0 5px 3px;
 }
 
 /* ------------------ Tools -------------------- */
 #tools {
     float: left;
-    width: 200px;
+    width: 180px;
     background: #aaa;
     border: 1px solid silver;
     border-radius: 5px;
@@ -45,7 +48,7 @@ h1 {
 }
 
 .toolsSection {
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 }
 
 
@@ -111,7 +114,7 @@ input[type="range"] {
     padding: 5px;
     border-radius: 4px;
     background: #444;
-    margin-left: 230px;
+    margin-left: 200px;
     position: relative;
     color: #eee;
 }
@@ -207,7 +210,7 @@ canvas.ondragover {
     background-color:transparent;
 }
 
-/* ------------------ Configure Dialog -------------------- */
+/* ------------------  Dialogs -------------------- */
 
 .modal {
     background-color:#fff;
@@ -226,7 +229,12 @@ canvas.ondragover {
 
 .modal h2 {
     margin:0px;
-    padding:10px 0 10px 45px;
+    padding:10px 0 10px 0px;
     border-bottom:1px solid #333;
     font-size:20px;
+    text-align: center;
+}
+
+.modal h3 {
+    font-size:16px;
 }

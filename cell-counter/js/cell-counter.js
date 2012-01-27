@@ -48,11 +48,12 @@
     return Marking;
   })();
   initCellCounter = function() {
-    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $restoreOriginalImageLink, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, configureEnabledMarkingTypes, cropWindow, ctx, ctxFiltered, currentFilename, currentImg, eventPosInCanvas, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, getSelectedMarkingType, init, initAutoCounter, initCropTool, initDragAndDrop, initManualCounter, initOnResize, initReadFile, initSliders, loadImage, loadLocalImage, loadMarkings, loadSettings, markings, onChangeMarkingsSize, onImageLoaded, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveMarkings, saveSettings, showCellCount, warnIfNoFileReaderAvailable;
+    var $canvas, $fadeThresholdImage, $markings, $markingsSize, $restoreOriginalImageLink, $restoreSavedCroppingLink, $threshold, addMarking, addMarkingWithSelectedType, canvas, changeFading, configureEnabledMarkingTypes, cropWindow, ctx, ctxFiltered, currentFilename, currentImg, eventPosInCanvas, eventPosInImage, filterImage, filterImage2, filteredCanvas, findNearestMarking, getSelectedMarkingType, init, initAutoCounter, initCropTool, initDragAndDrop, initHelp, initManualCounter, initOnResize, initReadFile, initSliders, loadForCurrentImage, loadImage, loadLocalImage, loadMarkings, loadSavedCropWindow, loadSettings, markings, onChangeMarkingsSize, onImageLoaded, onRemoveAllMarkings, removeAllMarkings, removeMarking, saveForCurrentImage, saveMarkings, saveSettings, savedCropWindow, showCellCount, warnIfNoFileReaderAvailable;
     $threshold = jq('#threshold');
     $fadeThresholdImage = jq('#fadeThresholdImage');
     $markingsSize = jq('#markingsSize');
     $restoreOriginalImageLink = $('#restoreOriginalImageLink');
+    $restoreSavedCroppingLink = $('#restoreSavedCroppingLink');
     currentImg = null;
     $canvas = jq('#mainCanvas');
     canvas = $canvas.get(0);
@@ -63,6 +64,7 @@
       x: 0,
       y: 0
     };
+    savedCropWindow = null;
     markings = [];
     $markings = jq('#markings');
     currentFilename = "";
@@ -70,6 +72,7 @@
       warnIfNoFileReaderAvailable();
       loadSettings();
       initConfigureDialog(configureEnabledMarkingTypes);
+      initHelp();
       configureEnabledMarkingTypes();
       initReadFile();
       initDragAndDrop();
@@ -82,8 +85,19 @@
       $('#removeAllMarkings').click(onRemoveAllMarkings);
       return $('#filterButton').click(filterImage2);
     };
+    initHelp = function() {
+      return $("#helpLink").overlay({
+        mask: {
+          color: '#ebecff',
+          loadSpeed: 200,
+          opacity: 0.7
+        },
+        closeOnClick: false
+      });
+    };
     initCropTool = function() {
       var $cropSelection, $helpText, cropImage, cropMarkins, cropStartPosInCanvas, fixPointOrder, points;
+      loadSavedCropWindow();
       $helpText = $('#helpText');
       $cropSelection = $('#cropSelection');
       points = null;
@@ -125,7 +139,12 @@
             $cropSelection.hide('slow');
             toolMode = TOOL_MODE.MARKING;
             fixPointOrder();
-            return cropImage();
+            return cropImage({
+              x: points[0].x,
+              y: points[0].y,
+              width: points[1].x - points[0].x,
+              height: points[1].y - points[0].y
+            });
           }
         }
       });
@@ -142,23 +161,17 @@
           return points[1].y = tempY;
         }
       };
-      cropImage = function() {
-        var imageData, newH, newW;
-        newW = points[1].x - points[0].x;
-        newH = points[1].y - points[0].y;
-        imageData = ctx.getImageData(points[0].x - cropWindow.x, points[0].y - cropWindow.y, newW, newH);
-        cropWindow = {
-          x: points[0].x,
-          y: points[0].y,
-          width: newW,
-          height: newH
-        };
-        canvas.width = newW;
-        canvas.height = newH;
+      cropImage = function(newCropWindow) {
+        var imageData;
+        imageData = ctx.getImageData(newCropWindow.x - cropWindow.x, newCropWindow.y - cropWindow.y, newCropWindow.width, newCropWindow.height);
+        cropWindow = newCropWindow;
+        canvas.width = newCropWindow.width;
+        canvas.height = newCropWindow.height;
         ctx.putImageData(imageData, 0, 0);
         filterImage();
         cropMarkins();
-        return $restoreOriginalImageLink.show('slow');
+        $restoreOriginalImageLink.show('slow');
+        return saveForCurrentImage('cropWindow', cropWindow);
       };
       cropMarkins = function() {
         var m, marking, pos, _i, _len, _ref, _ref2;
@@ -184,12 +197,24 @@
           return _results;
         })();
         saveMarkings();
-        return showCellCount();
+        showCellCount();
+        return $restoreSavedCroppingLink.hide('slow');
       };
-      return $restoreOriginalImageLink.click((function() {
+      $restoreOriginalImageLink.click((function() {
         $restoreOriginalImageLink.hide('slow');
         return onImageLoaded(currentImg);
       }));
+      return $restoreSavedCroppingLink.click((function() {
+        return cropImage(savedCropWindow);
+      }));
+    };
+    loadSavedCropWindow = function() {
+      savedCropWindow = loadForCurrentImage('cropWindow', null);
+      if (savedCropWindow) {
+        return $restoreSavedCroppingLink.show('slow');
+      } else {
+        return $restoreSavedCroppingLink.hide('slow');
+      }
     };
     initAutoCounter = function() {
       var autoCount;
@@ -264,10 +289,9 @@
       return showCellCount();
     };
     loadMarkings = function() {
-      var markingData, markingsData, markingsDataString, _i, _len, _results;
+      var markingData, markingsData, _i, _len, _results;
       removeAllMarkings();
-      markingsDataString = localStorage['cell_counter_markings_data_' + currentFilename] || "[]";
-      markingsData = JSON.parse(markingsDataString);
+      markingsData = loadForCurrentImage('markings_data', []);
       _results = [];
       for (_i = 0, _len = markingsData.length; _i < _len; _i++) {
         markingData = markingsData[_i];
@@ -289,7 +313,15 @@
         }
         return _results;
       })();
-      return localStorage['cell_counter_markings_data_' + currentFilename] = JSON.stringify(markingsData);
+      return saveForCurrentImage('markings_data', markingsData);
+    };
+    loadForCurrentImage = function(key, defaultValue) {
+      var loadedJSON, _ref;
+      loadedJSON = localStorage["cell_counter_" + key + "_" + currentFilename];
+      return (_ref = loadedJSON && JSON.parse(loadedJSON)) != null ? _ref : defaultValue;
+    };
+    saveForCurrentImage = function(key, data) {
+      return localStorage["cell_counter_" + key + "_" + currentFilename] = JSON.stringify(data);
     };
     initReadFile = function() {
       var $openFile;
@@ -483,6 +515,7 @@
       canvas.height = img.height;
       ctx.drawImage(img, 0, 0);
       loadMarkings();
+      loadSavedCropWindow();
       return filterImage();
     };
     filterImage = function() {
@@ -528,7 +561,7 @@
       mask: {
         color: '#ebecff',
         loadSpeed: 200,
-        opacity: 0.98
+        opacity: 0.7
       },
       closeOnClick: false
     });

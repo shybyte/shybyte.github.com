@@ -3,12 +3,14 @@
   <component name="ChangeListManager">
     <list default="true" id="b602acb2-bbcf-496a-ad77-f8c754647aec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/css/style.css" afterPath="$PROJECT_DIR$/cell-counter/css/style.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index-dev.html" afterPath="$PROJECT_DIR$/cell-counter/index-dev.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index.html" afterPath="$PROJECT_DIR$/cell-counter/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/utils.js" afterPath="$PROJECT_DIR$/cell-counter/js/utils.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/libs/jquery.tools.min.js" afterPath="$PROJECT_DIR$/cell-counter/libs/jquery.tools.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/manifest.appcache" afterPath="$PROJECT_DIR$/cell-counter/manifest.appcache" />
     </list>
     <ignored path="shybyte-github.iws" />
@@ -84,6 +86,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -148,7 +151,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -231,7 +233,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Restore Original Image After Crop" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added update message and version in title" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -254,6 +256,7 @@
     <MESSAGE value="lots of stuff" />
     <MESSAGE value="fixed crop/save bug" />
     <MESSAGE value="Restore Original Image After Crop" />
+    <MESSAGE value="Added update message and version in title" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

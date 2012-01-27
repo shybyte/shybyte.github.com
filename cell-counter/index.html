@@ -7,23 +7,29 @@
     <link type="text/css" rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<h1>Marco's Cell Counter v0.8.1</h1>
+<h1>Marco's Cell Counter v0.8.2</h1>
 
 <div id="menu">
+    <a href="#" id="restoreSavedCroppingLink" style="display: none;">Restore Saved Cropping</a>
     <a href="#" id="restoreOriginalImageLink" style="display: none;">Restore Original Image</a>
     <a href="#" id="cropImageLink" >Crop Image</a>
     <a href="#" id="configureLink" rel="#configureDialog">Settings</a>
+    <a href="#" id="helpLink" rel="#helpDialog">Help</a>
 </div>
 
 <div id="tools">
 
-    <div class="toolsSection" id="markingTypeSelectors">
+    <div class="toolsSection" >
+        <div id="markingTypeSelectors"></div>
+    </div>
+
+    <div class="toolsSection" >
+        <label for="markingsSize" class="rangeLabel">Markings Size:</label>
+        <input id="markingsSize" type="range" min="0" max="20" value="9">
+        <button id="removeAllMarkings">Remove All Markings</button>
     </div>
 
     <div class="toolsSection">
-        <button id="removeAllMarkings">Remove All Markings</button>
-        <label for="markingsSize" class="rangeLabel">Markings Size:</label>
-        <input id="markingsSize" type="range" min="0" max="20" value="9">
     </div>
 
     <div class="toolsSection">
@@ -37,7 +43,7 @@
 
     <div class="toolsSection">
         <button id="autoCountButton">Count Automatically</button>
-        <button id="filterButton">Filter</button>
+        <button id="filterButton" style="display: none;">Filter</button>
     </div>
 
 </div>
@@ -61,15 +67,25 @@
 
 <div class="modal" id="configureDialog" style="display: none;">
     <h2>Configure Cell Counter</h2>
-
+    <h3>Marking Types</h3>
     <div id="enabledMarkingTypesSelector">
 
     </div>
 
     <p>
-        <button id="configureOKButton" class="close"> OK </button>
-        <button class="close"> Cancel </button>
+        <button id="configureOKButton" class="close">OK</button>
+        <button class="close">Cancel</button>
     </p>
+</div>
+
+<div class="modal" id="helpDialog" style="display: none;">
+    <h2>Help</h2>
+    <h3>Manual Counting</h3>
+    <p>
+        Add a new marking with a left mouse click. Remove a marking with a right mouse click.
+        Alternatively you can hold the CTRL key while clicking left in order to remove a marking.
+    </p>
+    <button class="close">Close</button>
 </div>
 
 </body>

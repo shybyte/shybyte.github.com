@@ -43,6 +43,7 @@ initCellCounter = () ->
   $fadeThresholdImage = jq('#fadeThresholdImage')
   $markingsSize = jq('#markingsSize')
   $restoreOriginalImageLink = $('#restoreOriginalImageLink')
+  $restoreSavedCroppingLink = $('#restoreSavedCroppingLink')
   currentImg = null
   $canvas = jq('#mainCanvas')
   canvas = $canvas.get(0)
@@ -53,6 +54,7 @@ initCellCounter = () ->
     x: 0,
     y: 0
   }
+  savedCropWindow = null
   markings = []
   $markings = jq('#markings')
   currentFilename = ""
@@ -61,6 +63,7 @@ initCellCounter = () ->
     warnIfNoFileReaderAvailable()
     loadSettings()
     initConfigureDialog(configureEnabledMarkingTypes)
+    initHelp()
     configureEnabledMarkingTypes()
     initReadFile()
     initDragAndDrop()
@@ -73,7 +76,19 @@ initCellCounter = () ->
     $('#removeAllMarkings').click(onRemoveAllMarkings)
     $('#filterButton').click(filterImage2)
 
+  initHelp = ->
+    $("#helpLink").overlay({
+      mask:{
+      color:'#ebecff',
+      loadSpeed:200,
+      opacity:0.7
+      },
+      closeOnClick:false
+      })
+
+
   initCropTool = ->
+    loadSavedCropWindow()
     $helpText = $('#helpText')
     $cropSelection = $('#cropSelection')
     points = null
@@ -103,7 +118,7 @@ initCellCounter = () ->
           $cropSelection.hide('slow')
           toolMode = TOOL_MODE.MARKING
           fixPointOrder()
-          cropImage()
+          cropImage({x:points[0].x,y:points[0].y,width:points[1].x-points[0].x,height:points[1].y-points[0].y})
     )
     fixPointOrder = ->
       if points[1].x<points[0].x
@@ -114,18 +129,18 @@ initCellCounter = () ->
         tempY = points[0].y
         points[0].y = points[1].y
         points[1].y = tempY
-    cropImage = ->
-      newW = points[1].x-points[0].x
-      newH = points[1].y-points[0].y
-      imageData = ctx.getImageData(points[0].x-cropWindow.x, points[0].y-cropWindow.y, newW, newH)
-      cropWindow = {x: points[0].x, y: points[0].y, width: newW, height: newH}
-      canvas.width = newW
-      canvas.height = newH
+    cropImage = (newCropWindow)->
+      imageData = ctx.getImageData(newCropWindow.x-cropWindow.x, newCropWindow.y-cropWindow.y,
+        newCropWindow.width, newCropWindow.height)
+      cropWindow = newCropWindow
+      canvas.width = newCropWindow.width
+      canvas.height = newCropWindow.height
       #ctx.drawImage(canvasClone, points[0].x, points[0].y, newW, newH, 0, 0, newW, newH);
       ctx.putImageData(imageData, 0, 0);
       filterImage()
       cropMarkins()
       $restoreOriginalImageLink.show('slow')
+      saveForCurrentImage('cropWindow',cropWindow)
 
     cropMarkins = ->
       for marking in markings
@@ -139,11 +154,23 @@ initCellCounter = () ->
       markings =  (m for m in markings when !m.removed)
       saveMarkings()
       showCellCount()
+      $restoreSavedCroppingLink.hide('slow')
+
     $restoreOriginalImageLink.click ( ->
       $restoreOriginalImageLink.hide('slow')
       onImageLoaded(currentImg)
     )
 
+    $restoreSavedCroppingLink.click ( ->
+      cropImage(savedCropWindow)
+    )
+
+  loadSavedCropWindow = ->
+    savedCropWindow = loadForCurrentImage('cropWindow',null)
+    if savedCropWindow
+      $restoreSavedCroppingLink.show('slow')
+    else
+      $restoreSavedCroppingLink.hide('slow')
 
   initAutoCounter =->
     autoCount = ->
@@ -211,14 +238,22 @@ initCellCounter = () ->
 
   loadMarkings = ()->
     removeAllMarkings()
-    markingsDataString = (localStorage['cell_counter_markings_data_' + currentFilename]) || "[]"
-    markingsData = JSON.parse(markingsDataString)
+    markingsData = loadForCurrentImage('markings_data',[])
     for markingData in markingsData
       addMarking(markingData.pos, markingData.type)
 
   saveMarkings = () ->
     markingsData = ({pos:marking.pos, type:marking.type} for marking in markings)
-    localStorage['cell_counter_markings_data_' + currentFilename] = JSON.stringify(markingsData)
+    saveForCurrentImage('markings_data',markingsData)
+
+  loadForCurrentImage = (key,defaultValue)->
+    loadedJSON = localStorage["cell_counter_#{key}_#{currentFilename}"]
+    return loadedJSON && JSON.parse(loadedJSON) ? defaultValue
+
+
+  saveForCurrentImage = (key,data)->
+    localStorage["cell_counter_#{key}_#{currentFilename}"] = JSON.stringify(data)
+
 
 
   initReadFile = ->
@@ -380,6 +415,7 @@ initCellCounter = () ->
     canvas.height = img.height
     ctx.drawImage(img, 0, 0)
     loadMarkings()
+    loadSavedCropWindow()
     filterImage()
 
 
@@ -424,7 +460,7 @@ initConfigureDialog = (onNewEnabledMarkingTypes)->
     mask:{
     color:'#ebecff',
     loadSpeed:200,
-    opacity:0.98
+    opacity:0.7
     },
     closeOnClick:false
     })
