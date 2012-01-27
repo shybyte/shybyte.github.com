@@ -195,7 +195,7 @@ initCellCounter = () ->
           }, selectedMarkingType)
         saveMarkings()
         $('#countingMessage').hide('slow');
-      ,1)
+      ,19)
     $('#autoCountButton').click(autoCount)
 
   initOnResize = ->

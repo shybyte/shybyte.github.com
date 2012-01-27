@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="b602acb2-bbcf-496a-ad77-f8c754647aec" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index-dev.html" afterPath="$PROJECT_DIR$/cell-counter/index-dev.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/index.html" afterPath="$PROJECT_DIR$/cell-counter/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter-with-libs.min.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" />
@@ -231,7 +229,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cropping Expose" />
+    <option name="LAST_COMMIT_MESSAGE" value="Counting Indicator" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -257,6 +255,7 @@
     <MESSAGE value="Added update message and version in title" />
     <MESSAGE value="Save cropped Selection&#10;Add Help Page" />
     <MESSAGE value="Cropping Expose" />
+    <MESSAGE value="Counting Indicator" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />

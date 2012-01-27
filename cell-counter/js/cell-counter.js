@@ -245,7 +245,7 @@
           }
           saveMarkings();
           return $('#countingMessage').hide('slow');
-        }, 1);
+        }, 19);
       };
       return $('#autoCountButton').click(autoCount);
     };
