@@ -180,18 +180,22 @@ initCellCounter = () ->
 
   initAutoCounter =->
     autoCount = ->
-      removeAllMarkings();
-      cgs = Filters.compressedGrayScaleFromRed(ctx.getImageData(0, 0, canvas.width, canvas.height))
-      filteredCGS = cgs;
-      filteredCGS = Filters.meanCGSRepeated(filteredCGS,4,4)
-      filteredCGS = Filters.peaksCGS(filteredCGS,$threshold.val(),3)
-      selectedMarkingType = getSelectedMarkingType()
-      for peak in filteredCGS.peaks
-        addMarking({
-          x: peak.x+cropWindow.x
-          y: peak.y+cropWindow.y
-        }, selectedMarkingType)
-      saveMarkings()
+      removeAllMarkings()
+      $('#countingMessage').show()
+      setTimeout( ->
+        cgs = Filters.compressedGrayScaleFromRed(ctx.getImageData(0, 0, canvas.width, canvas.height))
+        filteredCGS = cgs;
+        filteredCGS = Filters.meanCGSRepeated(filteredCGS,4,4)
+        filteredCGS = Filters.peaksCGS(filteredCGS,$threshold.val(),3)
+        selectedMarkingType = getSelectedMarkingType()
+        for peak in filteredCGS.peaks
+          addMarking({
+            x: peak.x+cropWindow.x
+            y: peak.y+cropWindow.y
+          }, selectedMarkingType)
+        saveMarkings()
+        $('#countingMessage').hide('slow');
+      ,1)
     $('#autoCountButton').click(autoCount)
 
   initOnResize = ->

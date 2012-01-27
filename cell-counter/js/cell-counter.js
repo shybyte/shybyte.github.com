@@ -226,22 +226,26 @@
     initAutoCounter = function() {
       var autoCount;
       autoCount = function() {
-        var cgs, filteredCGS, peak, selectedMarkingType, _i, _len, _ref;
         removeAllMarkings();
-        cgs = Filters.compressedGrayScaleFromRed(ctx.getImageData(0, 0, canvas.width, canvas.height));
-        filteredCGS = cgs;
-        filteredCGS = Filters.meanCGSRepeated(filteredCGS, 4, 4);
-        filteredCGS = Filters.peaksCGS(filteredCGS, $threshold.val(), 3);
-        selectedMarkingType = getSelectedMarkingType();
-        _ref = filteredCGS.peaks;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          peak = _ref[_i];
-          addMarking({
-            x: peak.x + cropWindow.x,
-            y: peak.y + cropWindow.y
-          }, selectedMarkingType);
-        }
-        return saveMarkings();
+        $('#countingMessage').show();
+        return setTimeout(function() {
+          var cgs, filteredCGS, peak, selectedMarkingType, _i, _len, _ref;
+          cgs = Filters.compressedGrayScaleFromRed(ctx.getImageData(0, 0, canvas.width, canvas.height));
+          filteredCGS = cgs;
+          filteredCGS = Filters.meanCGSRepeated(filteredCGS, 4, 4);
+          filteredCGS = Filters.peaksCGS(filteredCGS, $threshold.val(), 3);
+          selectedMarkingType = getSelectedMarkingType();
+          _ref = filteredCGS.peaks;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            peak = _ref[_i];
+            addMarking({
+              x: peak.x + cropWindow.x,
+              y: peak.y + cropWindow.y
+            }, selectedMarkingType);
+          }
+          saveMarkings();
+          return $('#countingMessage').hide('slow');
+        }, 1);
       };
       return $('#autoCountButton').click(autoCount);
     };

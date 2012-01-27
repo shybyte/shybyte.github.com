@@ -48,8 +48,8 @@
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/cell-counter/manifest.appcache" />
         <option value="$PROJECT_DIR$/cell-counter/index.html" />
-        <option value="$PROJECT_DIR$/cell-counter/index-dev.html" />
         <option value="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
+        <option value="$PROJECT_DIR$/cell-counter/index-dev.html" />
       </list>
     </option>
   </component>
@@ -231,7 +231,7 @@
     <option name="INCLUDE_TEXT_INTO_SHELF" value="false" />
     <option name="CREATE_PATCH_EXPAND_DETAILS_DEFAULT" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="Save cropped Selection&#10;Add Help Page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cropping Expose" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -256,6 +256,7 @@
     <MESSAGE value="Restore Original Image After Crop" />
     <MESSAGE value="Added update message and version in title" />
     <MESSAGE value="Save cropped Selection&#10;Add Help Page" />
+    <MESSAGE value="Cropping Expose" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -266,24 +267,32 @@
         <state line="9" column="44" selection-start="186" selection-end="186" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cell-counter/manifest.appcache">
+    <entry file="file://$PROJECT_DIR$/cell-counter/js/cell-counter.coffee">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="0" selection-start="138" selection-end="138" vertical-scroll-proportion="0.0" />
+        <state line="119" column="43" selection-start="3233" selection-end="3233" vertical-scroll-proportion="0.15129682">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cell-counter/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="29" column="0" selection-start="1046" selection-end="1046" vertical-scroll-proportion="0.23133236" />
+        <state line="29" column="0" selection-start="1081" selection-end="1081" vertical-scroll-proportion="0.3074627">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cell-counter/manifest.appcache">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="0" selection-start="147" selection-end="147" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/cell-counter/index-dev.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="29" selection-start="868" selection-end="868" vertical-scroll-proportion="0.2238806" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cell-counter/js/cell-counter.coffee">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="142" column="0" selection-start="4257" selection-end="4257" vertical-scroll-proportion="0.64841497" />
+        <state line="58" column="8" selection-start="2143" selection-end="2210" vertical-scroll-proportion="0.8149254">
+          <folding />
+        </state>
       </provider>
     </entry>
   </component>
