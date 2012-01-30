@@ -23,4 +23,6 @@ Filters =
       imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
       return filter.apply(null, [imageData].concat(varArgs))
 
-window.Filters = Filters
+if typeof(window) != 'undefined'
+  window.Filters = Filters
+

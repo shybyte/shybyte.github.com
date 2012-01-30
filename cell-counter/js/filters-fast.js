@@ -1,3 +1,7 @@
+if (typeof Filters === 'undefined') {
+    Filters = {};
+}
+
 Filters.grayscale = function (pixels, args) {
     var d = pixels.data;
     for (var i = 0; i < d.length; i += 4) {
@@ -44,7 +48,7 @@ Filters.thresholdRG = function (pixels, args) {
     return pixels;
 }
 
-if (isCanvasSupported()) {
+if (typeof(isCanvasSupported) !== 'undefined' && isCanvasSupported()) {
     Filters.tmpCanvas = document.createElement('canvas');
     Filters.tmpCtx = Filters.tmpCanvas.getContext('2d');
 }
@@ -160,6 +164,38 @@ Filters.fastGaussian = function (pixels) {
     return output2;
 };
 
+Filters.compressedGrayScaleFromRedGreen = function (pixels) {
+    var src = pixels.data;
+    var grayScale = [];
+    var size = pixels.width * pixels.height;
+    var srcIndex = 0;
+    for (var i = 0; i < size; i++) {
+        grayScale[i] = (src[srcIndex]+src[srcIndex+1])/2;
+        srcIndex += 4;
+    }
+    return {
+        data:grayScale,
+        width:pixels.width,
+        height:pixels.height
+    }
+}
+
+Filters.compressedGrayScaleFromRedGreenBlue = function (pixels) {
+    var src = pixels.data;
+    var grayScale = [];
+    var size = pixels.width * pixels.height;
+    var srcIndex = 0;
+    for (var i = 0; i < size; i++) {
+        grayScale[i] = (src[srcIndex]*0.2126 +src[srcIndex+1]*0.7152+src[srcIndex+2]*0.0722);
+        srcIndex += 4;
+    }
+    return {
+        data:grayScale,
+        width:pixels.width,
+        height:pixels.height
+    }
+}
+
 Filters.compressedGrayScaleFromRed = function (pixels) {
     var src = pixels.data;
     var grayScale = [];
@@ -193,10 +229,11 @@ Filters.imageDataFromCompressedGrayScale = function (pixels) {
 }
 
 
-Filters.meanCGSRepeated = function (pixels, meanSize, repetitions) {
+Filters.meanCGSRepeated = function (pixels, meanSize, repetitions,reportProgress) {
     var tempResult = pixels;
     for (var i = 0; i < repetitions; i++) {
         tempResult = Filters.meanCGS(tempResult, meanSize);
+        reportProgress && reportProgress(i/repetitions)
     }
     return tempResult;
 }
@@ -221,7 +258,7 @@ Filters.meanCGSHorizontal = function (pixels, meanSize) {
     var meanSizeHalf = Math.floor(meanSize / 2)
     for (var i = meanSize; i < size; i++) {
         sum = sum + src[i] - src[posLeft++];
-        dst[i - meanSizeHalf+1] = sum / meanSize;
+        dst[i - meanSizeHalf] = sum / meanSize;
     }
 
     return {

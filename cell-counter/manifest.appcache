@@ -1,9 +1,11 @@
 CACHE MANIFEST
-# date 27.Jan.2012 4
+# date 30.Jan.2012 2
 
 CACHE:
 index.html
 css/style.css
+js/webworkers.js
 js/cell-counter-with-libs.min.js
 images/small-horizontal.png
+images/spinner.gif
 images/nora1.jpg

@@ -179,24 +179,40 @@ initCellCounter = () ->
       $restoreSavedCroppingLink.hide('slow')
 
   initAutoCounter =->
-    autoCount = ->
-      removeAllMarkings()
-      $('#countingMessage').show()
-      setTimeout( ->
-        cgs = Filters.compressedGrayScaleFromRed(ctx.getImageData(0, 0, canvas.width, canvas.height))
-        filteredCGS = cgs;
-        filteredCGS = Filters.meanCGSRepeated(filteredCGS,4,4)
-        filteredCGS = Filters.peaksCGS(filteredCGS,$threshold.val(),3)
-        selectedMarkingType = getSelectedMarkingType()
-        for peak in filteredCGS.peaks
-          addMarking({
+    $autoCountButton = $('#autoCountButton')
+    $countingMessage =  $('#countingMessage')
+    $countingProgress = $('#countingProgress')
+    setCountingProgress = (p) ->
+      $countingProgress.text(Math.round(p*100).toString())
+    worker = new Worker('js/webworkers.js');
+    worker.addEventListener('message', (e) ->
+      log('Worker said: ')
+      log(e.data)
+      switch e.data.cmd
+        when 'autocountProgress'
+          setCountingProgress(e.data.result)
+        when 'autocount'
+          selectedMarkingType = getSelectedMarkingType()
+          for peak in e.data.result
+            addMarking({
             x: peak.x+cropWindow.x
             y: peak.y+cropWindow.y
-          }, selectedMarkingType)
-        saveMarkings()
-        $('#countingMessage').hide('slow');
-      ,19)
-    $('#autoCountButton').click(autoCount)
+            }, selectedMarkingType)
+          saveMarkings()
+          $countingMessage.hide('slow')
+          $autoCountButton.attr("disabled", false)
+    , false)
+    worker.postMessage({cmd:'start',msg:'bla'});
+    autoCount = ->
+      $autoCountButton.attr("disabled", true)
+      removeAllMarkings()
+      setCountingProgress(0)
+      $countingMessage.show()
+      imageType = $('#imageTypeSelector').val()
+      imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      threshold = $threshold.val()
+      worker.postMessage({cmd:'autocount',imageData:imageData,threshold:threshold,imageType:imageType})
+    $autoCountButton.click(autoCount)
 
   initOnResize = ->
     jq(window).resize((e)->
@@ -223,8 +239,8 @@ initCellCounter = () ->
       $threshold.val(settings.threshold)
       $markingsSize.val(settings.markingsSize)
       $fadeThresholdImage.val(settings.fadeThresholdImage)
-      onChangeMarkingsSize()
-      changeFading()
+    onChangeMarkingsSize()
+    changeFading()
     configureEnabledMarkingTypes()
 
   configureEnabledMarkingTypes = ->

@@ -34,5 +34,7 @@
       return filter.apply(null, [imageData].concat(varArgs));
     }
   };
-  window.Filters = Filters;
+  if (typeof window !== 'undefined') {
+    window.Filters = Filters;
+  }
 }).call(this);
