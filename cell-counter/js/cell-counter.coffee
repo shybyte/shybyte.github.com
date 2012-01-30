@@ -183,24 +183,27 @@ initCellCounter = () ->
     $countingMessage =  $('#countingMessage')
     $countingProgress = $('#countingProgress')
     setCountingProgress = (p) ->
+      log(Math.round(p*100).toString())
       $countingProgress.text(Math.round(p*100).toString())
     worker = new Worker('js/webworkers.js');
     worker.addEventListener('message', (e) ->
-      log('Worker said: ')
-      log(e.data)
+      #log('Worker said: ')
+      #log(e.data)
       switch e.data.cmd
         when 'autocountProgress'
           setCountingProgress(e.data.result)
         when 'autocount'
-          selectedMarkingType = getSelectedMarkingType()
-          for peak in e.data.result
-            addMarking({
-            x: peak.x+cropWindow.x
-            y: peak.y+cropWindow.y
-            }, selectedMarkingType)
-          saveMarkings()
-          $countingMessage.hide('slow')
-          $autoCountButton.attr("disabled", false)
+          setTimeout( ->
+            selectedMarkingType = getSelectedMarkingType()
+            for peak in e.data.result
+              addMarking({
+              x: peak.x+cropWindow.x
+              y: peak.y+cropWindow.y
+              }, selectedMarkingType)
+            saveMarkings()
+            $countingMessage.hide('slow')
+            $autoCountButton.attr("disabled", false)
+          ,7)
     , false)
     worker.postMessage({cmd:'start',msg:'bla'});
     autoCount = ->

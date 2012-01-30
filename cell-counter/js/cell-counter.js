@@ -229,29 +229,30 @@
       $countingMessage = $('#countingMessage');
       $countingProgress = $('#countingProgress');
       setCountingProgress = function(p) {
+        log(Math.round(p * 100).toString());
         return $countingProgress.text(Math.round(p * 100).toString());
       };
       worker = new Worker('js/webworkers.js');
       worker.addEventListener('message', function(e) {
-        var peak, selectedMarkingType, _i, _len, _ref;
-        log('Worker said: ');
-        log(e.data);
         switch (e.data.cmd) {
           case 'autocountProgress':
             return setCountingProgress(e.data.result);
           case 'autocount':
-            selectedMarkingType = getSelectedMarkingType();
-            _ref = e.data.result;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              peak = _ref[_i];
-              addMarking({
-                x: peak.x + cropWindow.x,
-                y: peak.y + cropWindow.y
-              }, selectedMarkingType);
-            }
-            saveMarkings();
-            $countingMessage.hide('slow');
-            return $autoCountButton.attr("disabled", false);
+            return setTimeout(function() {
+              var peak, selectedMarkingType, _i, _len, _ref;
+              selectedMarkingType = getSelectedMarkingType();
+              _ref = e.data.result;
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                peak = _ref[_i];
+                addMarking({
+                  x: peak.x + cropWindow.x,
+                  y: peak.y + cropWindow.y
+                }, selectedMarkingType);
+              }
+              saveMarkings();
+              $countingMessage.hide('slow');
+              return $autoCountButton.attr("disabled", false);
+            }, 7);
         }
       }, false);
       worker.postMessage({

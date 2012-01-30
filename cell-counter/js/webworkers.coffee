@@ -18,7 +18,7 @@ addEventListener('message', (e)->
       )
       postProgress(0.8)
       filteredCGS = Filters.peaksCGS(filteredCGS,data.threshold,3)
-      postProgress(1)
+      postProgress(1.0)
       postMessage({cmd:'autocount',result:filteredCGS.peaks})
 , false)
 
