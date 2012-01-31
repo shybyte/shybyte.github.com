@@ -7,6 +7,7 @@ addEventListener('message', (e)->
     when 'start'
       postMessage('WORKER STARTED: ' + data.msg)
     when 'autocount'
+      postMessage("bla:"+data.imageData.width)
       if  data.imageType == 'whiteOnBlue'
         cgs = Filters.compressedGrayScaleFromRedGreen(data.imageData)
       else

@@ -187,8 +187,8 @@ initCellCounter = () ->
       $countingProgress.text(Math.round(p*100).toString())
     worker = new Worker('js/webworkers.js');
     worker.addEventListener('message', (e) ->
-      #log('Worker said: ')
-      #log(e.data)
+      log('Worker said: ')
+      log(e.data)
       switch e.data.cmd
         when 'autocountProgress'
           setCountingProgress(e.data.result)
@@ -212,9 +212,14 @@ initCellCounter = () ->
       setCountingProgress(0)
       $countingMessage.show()
       imageType = $('#imageTypeSelector').val()
-      imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
       threshold = $threshold.val()
-      worker.postMessage({cmd:'autocount',imageData:imageData,threshold:threshold,imageType:imageType})
+      setTimeout( ->
+        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        ua = $.browser;
+        if  ua.mozilla && ua.version.slice(0,3) == "1.9"
+          imageData = Filters.cloneImageDataAsNormalObject(imageData)
+        worker.postMessage({cmd:'autocount',imageData:imageData,threshold:threshold,imageType:imageType})
+      ,7)
     $autoCountButton.click(autoCount)
 
   initOnResize = ->

@@ -180,6 +180,21 @@ Filters.compressedGrayScaleFromRedGreen = function (pixels) {
     }
 }
 
+Filters.cloneImageDataAsNormalObject = function (pixels) {
+    var src = pixels.data;
+    var normalArray = [];
+    var size = pixels.width * pixels.height*4;
+    for (var i = 0; i < size; i++) {
+        normalArray[i] = src[i];
+    }
+    return {
+        data:normalArray,
+        width:pixels.width,
+        height:pixels.height
+    }
+}
+
+
 Filters.compressedGrayScaleFromRedGreenBlue = function (pixels) {
     var src = pixels.data;
     var grayScale = [];

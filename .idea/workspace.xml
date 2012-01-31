@@ -7,7 +7,9 @@
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.coffee" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" afterPath="$PROJECT_DIR$/cell-counter/js/cell-counter.min.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/filters-fast.js" afterPath="$PROJECT_DIR$/cell-counter/js/filters-fast.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/webworkers.coffee" afterPath="$PROJECT_DIR$/cell-counter/js/webworkers.coffee" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/js/webworkers.js" afterPath="$PROJECT_DIR$/cell-counter/js/webworkers.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cell-counter/manifest.appcache" afterPath="$PROJECT_DIR$/cell-counter/manifest.appcache" />
     </list>
     <ignored path="shybyte-github.iws" />

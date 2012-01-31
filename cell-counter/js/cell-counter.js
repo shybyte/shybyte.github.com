@@ -234,6 +234,8 @@
       };
       worker = new Worker('js/webworkers.js');
       worker.addEventListener('message', function(e) {
+        log('Worker said: ');
+        log(e.data);
         switch (e.data.cmd) {
           case 'autocountProgress':
             return setCountingProgress(e.data.result);
@@ -260,20 +262,27 @@
         msg: 'bla'
       });
       autoCount = function() {
-        var imageData, imageType, threshold;
+        var imageType, threshold;
         $autoCountButton.attr("disabled", true);
         removeAllMarkings();
         setCountingProgress(0);
         $countingMessage.show();
         imageType = $('#imageTypeSelector').val();
-        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         threshold = $threshold.val();
-        return worker.postMessage({
-          cmd: 'autocount',
-          imageData: imageData,
-          threshold: threshold,
-          imageType: imageType
-        });
+        return setTimeout(function() {
+          var imageData, ua;
+          imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          ua = $.browser;
+          if (ua.mozilla && ua.version.slice(0, 3) === "1.9") {
+            imageData = Filters.cloneImageDataAsNormalObject(imageData);
+          }
+          return worker.postMessage({
+            cmd: 'autocount',
+            imageData: imageData,
+            threshold: threshold,
+            imageType: imageType
+          });
+        }, 7);
       };
       return $autoCountButton.click(autoCount);
     };
