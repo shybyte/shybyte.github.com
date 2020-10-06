@@ -9,7 +9,7 @@ tags:   TypeScript JavaScript Code-Smell
 
 Recently I stumbled about the following TypeScript module:
 
-```TypeScript
+```typescript
 class SomethingUtils {
   public static doSomething() {
     // implementation
@@ -26,7 +26,7 @@ and it only serves as container for the `doSomething` function.
 In programming languages like Java such travesty is needed because you can’t define a function outside of a class.
 In languages like TypeScript his unnecessary class wrapper is distracting and clutters up your code.
 It's shorter and more idiomatic to write
-```TypeScript
+```typescript
   export function doSomething() {
     // implementation
   };
@@ -36,7 +36,7 @@ This also unclutters the call site of the function because `SomethingUtils.doSom
 
 Another variant of this functions-as-method-travesty is the following "class" I found:
 
-```TypeScript
+```typescript
 export interface FullName {
   firstName: string;
   lastName: string;
@@ -59,24 +59,24 @@ export default FullNameConverter;
 ```
 
 At call-site it's used like this:
-```TypeScript
+```typescript
 const fullName =  new FullNameConverter().parseFullName('marco_stahl');
 ```
 
 or like this
-```TypeScript
+```typescript
 const flc = new FullNameConverter();
 const fullName = flc.parseFullName('kaja_stahl');
 ```
 
 I don't know about you, but for me a simple
-```TypeScript
+```typescript
 const fullName = parseFullName('kaja_stahl');
 ```
 is at least equally readable and more succinct.
 
 The required implementation code is also shorter and at least equally understandable:
-```TypeScript
+```typescript
 export interface FullName {
   firstName: string;
   lastName: string;
@@ -113,7 +113,7 @@ If you really insist in doing Object-oriented programming, I would recommend to 
 Maybe the `doSomething` from our first example belongs actually somewhere else?
 Maybe `FullName` should be a class instead of just an interface. Suddenly there’s a logical place to put the methods and the result is pretty succinct:
 
-```TypeScript
+```typescript
 const DELIMITER = '_';
 
 export default class FullName {
@@ -131,10 +131,10 @@ export default class FullName {
 ```
 
 The effort on call-site is also less than in the original implementation, because there’s no artificial pseudo class:
-```TypeScript
+```typescript
 const fullName = FullName.parse('kaja_stahl');
 ```
 
-```TypeScript
+```typescript
 const fullNameSerialized = fullName.serialize();
 ```

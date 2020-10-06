@@ -116,9 +116,9 @@ In TypeScript this setting is called *noUnusedLocals*.
 * Should we consider indexed array access as a code smell? Especially when it's indexed by a constant? At least outside of numerical code?
 * Would a linter rule help to detected places where we should favor array destructuring? https://eslint.org/docs/rules/prefer-destructuring isn’t doing exactly what we want, but only works for direct assignments. However, it should be easy to develop a rule that does what we want. But would it be useful or produce too many false complains?
 * An even "drier" version of this function could look like this:
-    ```typescript
-    function parseFullName(fullName: string): FullName {
-        const [firstName, lastName] = fullName.split('_').map(decodeBase64);
-        return { firstName, lastName };
-    }
-    ```
+```typescript
+function parseFullName(fullName: string): FullName {
+    const [firstName, lastName] = fullName.split('_').map(decodeBase64);
+    return { firstName, lastName };
+}
+```
