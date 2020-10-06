@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "How to prevent bugs by using Array Destructuring, Unused-Variables-Warnings and Radical Function Extraction"
+title:  "How to prevent bugs by using Array Destructuring, Unused Variables Warnings and Radical Function Extraction"
 date:   2020-10-06 08:34:55 +0200
-categories: jekyll update
+tags:   TypeScript JavaScript Code-Smell
 ---
 
 

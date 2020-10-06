@@ -18,3 +18,8 @@ gem install jekyll bundler
 https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages/testing-your-github-pages-site-locally-with-jekyll
 
     bundle exec jekyll serve
+    
+## Some Jekyll Links
+
+* https://github.com/jekyll/minima
+* http://longqian.me/2017/02/09/github-jekyll-tag/    
