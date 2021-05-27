@@ -29,6 +29,11 @@ layout: default
     {{ content }}
   </div>
 
+  <link rel='stylesheet' href='/assets/hyper-kommentar/hyper-kommentar.css'/>
+  <div id="hyper-kommentar" data-page-id="{{page.pageId}}"></div>
+  <script src='/assets/hyper-kommentar/libs/apprun-html.js' defer></script>
+  <script src='/assets/hyper-kommentar/hyper-kommentar.js' defer></script>
+
   {%- if site.disqus.shortname -%}
     {%- include disqus_comments.html -%}
   {%- endif -%}

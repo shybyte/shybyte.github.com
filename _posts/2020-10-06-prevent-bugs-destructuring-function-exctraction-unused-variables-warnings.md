@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "How to prevent bugs by using Array Destructuring, Unused Variables Warnings and Radical Function Extraction"
+pageId: "prevent-bugs-array-destructuring"
 date:   2020-10-06 08:34:55 +0200
 tags:   TypeScript JavaScript Code-Smell
 ---

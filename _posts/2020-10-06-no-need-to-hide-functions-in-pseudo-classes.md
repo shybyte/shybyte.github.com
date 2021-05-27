@@ -1,6 +1,7 @@
 ---
 layout: post
 title:  "You don't need to hide your functions in pseudo classes"
+pageId: "no-pseudo-classes"
 date:   2020-10-06 09:34:55 +0200
 tags:   TypeScript JavaScript Code-Smell
 ---

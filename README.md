@@ -21,5 +21,8 @@ https://docs.github.com/en/free-pro-team@latest/github/working-with-github-pages
     
 ## Some Jekyll Links
 
+* https://talk.jekyllrb.com/t/what-is-the-recommended-way-to-add-comment-sections-to-your-jekyll-blog/3330
 * https://github.com/jekyll/minima
 * http://longqian.me/2017/02/09/github-jekyll-tag/    
+* https://darekkay.com/blog/static-site-comments/
+  * https://comntr.github.io/about/
